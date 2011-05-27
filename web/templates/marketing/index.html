@@ -1,0 +1,86 @@
+{% extends "marketing/base.html" %}
+{% load i18n %}
+{% block js %}
+<script type="text/javascript">
+  var IMAGES_DIR = "{{MEDIA_URL}}images/";
+</script>
+<script type="text/javascript" src="{{MEDIA_URL}}js/jquery.nyroModal-1.6.2.min.js"></script>
+<script type="text/javascript" src="{{MEDIA_URL}}js/jquery.cookie.js"></script>
+<script type="text/javascript" src="{{MEDIA_URL}}js/jquery.form.js"></script>
+<script type="text/javascript" src="{{MEDIA_URL}}js/pages/immersion-index.js"></script>
+{% endblock %}
+{% block content %}
+<h1>The langoLAB Virtual Dual Immersion Platform</h1>
+<div class="clear">
+  <div id="leftCol">
+    <h2>Is your school interested in adding a virtual immersion component to its language curriculum?</h2>
+    <p>Langolab lets you introduce a virtual language exchange program into your department the easy way.</p>
+    <p>With Langolab, students get paired with native speakers of the target language to converse and interact in real time. Virtual dual immersion accelerates acquisition, increases oral proficiency, motivates learners, and facilitates authentic intercultural exploration.</p>
+    <ul class="pointslist">
+      <li class="clear">
+        <a href="#" data-largeimage="interaction_large.png"><img src="{{MEDIA_URL}}images/interaction_small.jpg"/></a>
+        <div>We take care of finding tandem partners for your students. Our scheduling system makes it easy for students to reserve time with each other.</div>
+      </li>
+      <li class="clear">
+        <a href="#" data-largeimage="interactionnotes_large.png"><img src="{{MEDIA_URL}}images/interactionnotes_small.jpg"/></a>
+        <div>While typing to each other, Langolab provides tools to help with vocab and grammar, using artificial intelligence to link conversational content back to classroom lessons.</div>
+      </li>
+      <li class="clear">
+        <a href="#" data-largeimage="dashboard_large.jpg"><img src="{{MEDIA_URL}}images/dashboard_small.jpg"/></a>
+        <div>Our teacher dashboard makes it easy for teachers to grade students' interactions.</div>
+      </li>
+    </ul>
+  </div>
+  <div id="rightCol">
+    
+    
+    <div id="rightPanel">
+      <p>The Langolab Virtual Dual Immersion Platform is currently in development. We're actively seeking partner schools. Please contact us to learn more. 
+        We can also be reached at <a class="ll-LinkButton" id="team_a"></a>.</p>
+      <script type="text/javascript">
+        document.getElementById('team_a').href = ["mailt", "o:team", "@lang", "olab.com"].join('');
+        document.getElementById('team_a').innerHTML = ["team", "@lang", "olab.com"].join('');
+      </script>
+      <div id="ll_textBoxes">
+        <form method="post" action="{% url marketing:interest %}" id="interest_form">
+          {% csrf_token %}
+          <ul class="errorlist" id="name_errors"></ul>
+          <div class="input">
+            <label for="id_name">Name</label>{{form.name}}
+          </div>
+          <div class="input">
+            <label for="id_school">School</label>{{form.school}}
+          </div>
+          <div class="input">
+            <label for="id_position">Position</label>{{form.position}}
+          </div>
+          <ul class="errorlist" id="email_errors"></ul>
+          <div class="input">
+            <label for="id_email">Email</label>{{form.email}}
+          </div>
+          <button>Submit</button>
+        </form>
+      </div>
+      <p style="display:none">
+        Thank you for your interest. We will contact you shortly.
+      </p>
+    </div>
+    <h2>Think this is interesting? Share it!</h2>
+    <div class="share">
+      <script type="text/javascript" src="http://platform.linkedin.com/in.js"></script><script type="in/share" data-counter="right" data-url="http://www.langolab.com/"></script> 
+    </div>
+    <div class="share">
+      <a href="http://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="langolab">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+    </div>
+    <div class="share">
+      <script src="http://connect.facebook.net/en_US/all.js#xfbml=1"></script><fb:like href="http://www.langolab.com"></fb:like>
+    </div>
+  </div>
+</div>
+<div class="gwt-DecoratedPopupPanel hintDialog"><div class=""><table cellspacing="0" cellpadding="0" class=""><tbody><tr class="popupTop"><td class="popupTopLeft"><div class="popupTopLeftInner"></div></td><td class="popupTopCenter"><div class="popupTopCenterInner"></div></td><td class="popupTopRight"><div class="popupTopRightInner"></div></td></tr><tr class="popupMiddle"><td class="popupMiddleLeft"><div class="popupMiddleLeftInner"></div></td><td class="popupMiddleCenter"><div class="popupMiddleCenterInner popupContent">
+  {% trans "Looking for the video site? Click here!" %}
+  <div style="text-align: right;">
+    <a href="#" class="ll-LinkButton">{% trans "close" %}</a>
+  </div>
+</div></td><td class="popupMiddleRight"><div class="popupMiddleRightInner"></div></td></tr><tr class="popupBottom"><td class="popupBottomLeft"><div class="popupBottomLeftInner"></div></td><td class="popupBottomCenter"><div class="popupBottomCenterInner"></div></td><td class="popupBottomRight"><div class="popupBottomRightInner"></div></td></tr></tbody></table></div></div>
+{% endblock %}

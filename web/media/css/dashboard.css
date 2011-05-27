@@ -1,0 +1,22 @@
+.session {
+   margin-bottom: 10px;
+}
+
+.student-image {
+   float: left;
+}
+
+.student-description {
+   margin-left: 120px;
+}
+
+.session-image {
+   float: left;
+}
+.session-description {
+   float: left;
+   margin-left: 10px;
+}
+.session-snippet {
+   margin-left: 200px;
+}

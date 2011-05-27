@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block css %}
+<link rel="stylesheet" media="screen" type="text/css" href="{{MEDIA_URL}}css/login.css"/>
+<link rel="stylesheet" media="screen" type="text/css" href="{{MEDIA_URL}}css/index.css"/>
+{% endblock %}
+
+{% block scripts %}
+{{ block.super }}
+<script type="text/javascript" src="{{MEDIA_URL}}js/share.js"></script>
+{% endblock %}
+
+{% block content %}
+<h1>Practice a foreign language with a native speaker, over webcam.</h1>
+<div class="rightcolumn">
+  <h2>
+    You get matched with someone who natively speaks the 
+    language you're trying to learn, and who is trying 
+    to learn your language. You talk.
+  </h2>
+</div>
+<div class="login-stuff">
+  <a class="start-talking" href="{% url conversations:enter_conversations %}">Start talking</a>
+  <h2>Do you have feedback? Ideas? Want to discuss something?</h2>
+  <p>
+    That's great, we're just getting started. Please visit our discussion 
+    group: <a href="http://groups.google.com/group/langolab-users" target="discussion">http://groups.google.com/group/langolab-users</a>.
+  </p>
+</div>
+<div class="most-popular">
+  <h3>Most popular languages over last week</h3>
+  <ul class="top-languages-list">
+  {% for daily_visit in daily_visits %}
+    <li class="rank-{{forloop.counter}}">
+      <span class="label"><span class="native">{{ daily_visit.native_language_name }}</span> speakers learning <span class="foreign">{{ daily_visit.foreign_language_name }}</span></span>
+      <span class="total-count">{{ daily_visit.total_count }}</span>
+    </li>
+  {% endfor %}
+  </ul>
+  <h3 class="spread-word">Help us spread the word!</h3>
+  <div class="share">
+    <a class="share fb-share fb-sharesite" href="javascript:void();"><span>Share on Facebook</span></a>
+    <a class="share tw-share tw-sharesite" href="javascript:void();"><span>Share on Twitter</span></a>
+  </div>
+</div>
+{% endblock %}

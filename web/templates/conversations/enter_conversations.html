@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Start a conversation!</h2>
+<p>I want to talk to someone who speaks:</p>
+<div class="empty-form" style="display: none">
+  <li class="user_language">
+    {{ formset.empty_form.id }}
+    {{ formset.empty_form.language }}
+    <a href="#" class="small_close remove-language">Remove</a>
+    <div style="display: none" class="delete-checkbox">
+      {{ formset.empty_form.DELETE }}
+    </div>
+  </li>
+</div>
+
+<form id="user_language_form" method="POST" action=".">
+  {% csrf_token %}
+  {{ formset.management_form }}
+  {{ formset.non_field_errors }}
+  <ul class="language_list">
+    {% for form in formset.forms %}
+    <li class="user_language">
+      {{ form.non_field_errors }}
+      {{ form.id }}
+      {{ form.language }}
+      {% if not forloop.first %}
+         <a href="#" class="small_close remove-language">Remove</a>
+         <div style="display: none" class="delete-checkbox">
+           {{ form.DELETE }}
+         </div>
+      {% endif %}
+    </li>
+    {% endfor %}
+    <button class="green_button small add-language">
+      <span><span class="plus"></span>Add Language</span>
+    </button>
+  </ul>
+  <input type="hidden" name="languages_extra" id="languages_extra"/>
+  <button><span>Start</span></button>
+</form>
+{% endblock %}
+
+{% block scripts %}
+{{ block.super }}
+<script type="text/javascript">
+  var form_count = {{ formset.total_form_count }};
+</script>
+<script type="text/javascript" src="{{MEDIA_URL}}js/enter_conversations.js"></script>
+{% endblock %}

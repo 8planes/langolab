@@ -1,0 +1,6 @@
+
+
+To deploy:
+
+1. Recursively copy contents of conf/ to /etc/llexchange/
+2. Start orbited with argument --config=/etc/llexchange/orbited.cfg

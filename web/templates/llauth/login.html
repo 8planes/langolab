@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block css %}
+<link rel="stylesheet" media="screen" type="text/css" href="{{MEDIA_URL}}css/login.css"/>
+{% endblock %}
+
+{% block content %}
+<h2>
+  To keep the site rated G, we need you to sign in. You can sign in using Facebook, 
+  Twitter, or Google. Or you can create a username and password for this site.
+</h2>
+<div id="login">
+  <h2 class="top-header">Sign in</h2>
+  <form action="{% url llauth:login_post %}" method="post" id="login_form">
+    {% csrf_token %}
+    {{ login_form.as_p }}
+    <button type="submit" value="login">Login</button>
+    <input type="hidden" name="next" value="{{ next }}" />
+  </form>
+  <div class="social-signin-container">
+    <h3 class="social-signin">Or sign in using:</h3>
+    <div class="social-signin">
+      <a class="login facebook" href="{% url socialauth_facebook_login %}?next={% url conversations:enter_conversations %}">&nbsp;</a>
+      <a class="login google" href="{% url socialauth_google_login %}?next={% url conversations:enter_conversations %}">&nbsp;</a>
+      <a class="login twitter" href="{% url llauth:twitter_login %}?next={% url conversations:enter_conversations %}">&nbsp;</a>
+    </div>
+  </div>
+</div>
+<div id="create_account">
+  <h2 class="top-header">Create an Account</h2>
+  <form id="creation_form" action="{% url llauth:create_user %}" method="post">
+    {% csrf_token %}
+    {{ creation_form.as_p }}
+    <button type="submit" value="create account">Create Account</button>
+    <input type="hidden" name="next" value="{{ next }}" />
+  </form>
+</div>
+{% endblock %}

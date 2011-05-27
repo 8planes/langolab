@@ -1,0 +1,112 @@
+[
+    {
+        "pk": 3,
+        "model": "auth.user",
+        "fields": {
+            "username": "test",
+            "first_name": "Test",
+            "last_name": "Test",
+            "is_active": true,
+            "is_superuser": true,
+            "is_staff": true,
+            "last_login": "2010-07-29 09:58:59",
+            "groups": [],
+            "user_permissions": [],
+            "password": "sha1$53f8f$7855004fa0d9cced3776f0f51dab706ec5193271",
+            "email": "admin@admin.ua",
+            "date_joined": "2010-04-15 10:31:51"
+        }
+    },
+    {
+        "pk": 3,
+        "model": "llauth.customuser",
+        "fields": {
+            "is_approved": true,
+            "native_language": "en"
+        }
+    },
+    {
+        "pk": 3,
+        "model": "llauth.preferreduserlanguage",
+        "fields": {
+            "user": 3,
+            "language": "es"
+        }
+    },
+    {
+        "pk": 4,
+        "model": "auth.user",
+        "fields": {
+            "username": "jose",
+            "first_name": "Jose",
+            "last_name": "Lopez",
+            "is_active": true,
+            "is_superuser": true,
+            "is_staff": true,
+            "last_login": "2010-07-29 09:58:59",
+            "groups": [],
+            "user_permissions": [],
+            "password": "sha1$53f8f$7855004fa0d9cced3776f0f51dab706ec5193271",
+            "email": "admin@admin.mx",
+            "date_joined": "2010-04-15 10:31:51"
+        }
+    },
+    {
+        "pk": 4,
+        "model": "llauth.customuser",
+        "fields": {
+            "is_approved": true,
+            "native_language": "es"
+        }
+    },
+    {
+        "pk": 4,
+        "model": "llauth.preferreduserlanguage",
+        "fields": {
+            "user": 4,
+            "language": "en"
+        }
+    },
+    {
+        "pk": 5,
+        "model": "auth.user",
+        "fields": {
+            "username": "ricardo",
+            "first_name": "Ricardo",
+            "last_name": "Olio",
+            "is_active": true,
+            "is_superuser": true,
+            "is_staff": true,
+            "last_login": "2010-07-29 09:58:59",
+            "groups": [],
+            "user_permissions": [],
+            "password": "sha1$53f8f$7855004fa0d9cced3776f0f51dab706ec5193271",
+            "email": "admin@admin.it",
+            "date_joined": "2010-04-15 10:31:51"
+        }
+    },
+    {
+        "pk": 5,
+        "model": "llauth.customuser",
+        "fields": {
+            "is_approved": true,
+            "native_language": "it"
+        }
+    },
+    {
+        "pk": 5,
+        "model": "llauth.preferreduserlanguage",
+        "fields": {
+            "user": 5,
+            "language": "en"
+        }
+    },
+    {
+        "pk": 6,
+        "model": "llauth.preferreduserlanguage",
+        "fields": {
+            "user": 5,
+            "language": "es"
+        }
+    }
+]

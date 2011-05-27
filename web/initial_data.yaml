@@ -1,0 +1,11 @@
+- model: sites.site
+  pk: 1
+  fields:
+    domain: ll.example.com:8000
+    name: ll-dev
+
+- model: sites.site
+  pk: 2
+  fields:
+    domain: www.langolab.com
+    name: langolab

@@ -1,0 +1,90 @@
+{% extends "marketing/base.html" %}
+{% block css %}
+<link rel="stylesheet" media="screen" type="text/css" href="{{MEDIA_URL}}css/interaction.css"/>
+{% endblock %}
+{% block content %}
+<div class="leftCol">
+  <img src="{{MEDIA_URL}}images/sharon.png"/>
+  <div>
+    Anke, Germany 
+  </div>
+  <h3>Highest scores for today</h3>
+  <ul class="top-score-list">
+    <li class="top"><span class="scorer-name">Dieter</span> <span class="scorer-score">240</span></li>
+    <li><span class="scorer-name">Melinda</span> <span class="scorer-score">235</span></li>
+    <li><span class="scorer-name">John</span> <span class="scorer-score">160</span></li>
+    <li><span class="scorer-name">Casey</span> <span class="scorer-score">158</span></li>
+    <li><span class="scorer-name">Anke</span> <span class="scorer-score">140</span></li>
+  </ul>
+</div>
+<div class="rightCol">
+  <div style="height: 40px">
+    <h2 style="padding-bottom: 8px;">Current Language: German</h2>
+    <h2 style="padding-bottom: 8px;">Current Game: Negotiation</h2>
+  </div>
+  <div class="reminder">
+    Remember, you are trying to get the price of the lot as far below $25,000 as possible!
+  </div>
+  <div class="scores">
+    <div class="me"><span>You:</span> <span class="score">80</span></div>
+    <div class="other"><span>Anke:</span> <span class="score">70</span></div>
+  </div>
+  <div class="conversation">
+    <div class="utterance">
+      <div class="name name-a">Anke</div>
+      <div class="talk talk-a">Wie Sie schon wissen ziehen wir bald um, also können wir Ihnen das Grundstück verkaufen.  Wieviel möchten Sie dafür bezahlen?</div>
+    </div>
+    <div class="utterance">
+      <div class="name name-b">Johanna</div>
+      <div class="talk talk-b">Das habe ich mit meinem Mann überlegt, und wir können uns $15,000 leisten.</div>
+    </div>
+    <div class="utterance">
+      <div class="name name-a">Anke</div>
+      <div class="talk talk-a"><span class="highlighted">Naja, wir meinen, dass es etwas mehr Wert ist.</span>  Mindestens $30,000.  Wir haben schon echt viel Geld ausgeben, um es vor einigen Jahren in Ordnung zu bringen.</div>
+    </div>
+    <div class="utterance">
+      <div class="name name-b">Johanna</div>
+      <div class="talk talk-b">Ja sicher, aber Sie ziehen sowieso bald um, und ich bin die einzige Interessentin.  Reich sind wir nicht.  $20,000, sonst müssen Sie jemand anderes finden.</div>
+    </div>
+  </div>
+  <input class="chat-input" type="text"></input>
+</div>
+<div class="gwt-DecoratedPopupPanel grammarDialog"><div class=""><table cellspacing="0" cellpadding="0" class=""><tbody><tr class="popupTop"><td class="popupTopLeft"><div class="popupTopLeftInner"></div></td><td class="popupTopCenter"><div class="popupTopCenterInner"></div></td><td class="popupTopRight"><div class="popupTopRightInner"></div></td></tr><tr class="popupMiddle"><td class="popupMiddleLeft"><div class="popupMiddleLeftInner"></div></td><td class="popupMiddleCenter"><div class="popupMiddleCenterInner popupContent">
+  <h2>Naja, wir meinen, dass es etwas mehr Wert ist.</h2>
+  <h2 class="translation">(Well, we think that it is a bit more value.)</h2>
+  <h3 class="sectionTitle"><span class="title">The subordinating conjunction <em>dass</em>.</span> <span class="source">(From <a class="ll-LinkButton" href="#">Chapter 11</a>)</span></h3>
+  <p>Clauses joined by subordinating conjunctions can follow these two word order patterns:</p>
+  <ol class="conceptList">
+    <li>
+      The sentence begins with the main clause: In this case, the main clause has regular word order (meaning verb is second), and the dependent clause created by the conjunction has dependent word order (with verb last):
+      <table class="concept">
+        <tr>
+          <th>Clause 1</th>
+          <th>Conj.</th>
+          <th>Clause 2</th>
+        </tr>
+        <tr>
+          <td>Ich <span class="verb">muss</span> weit fahren<span class="comma">,</span></td>
+          <td>weil</td>
+          <td>die Polizei jagt mir <span class="verb">sind.</span></td>
+        </tr>
+      </table>
+      <div class="example">(I must drive far because the police are chasing me.)</div>
+    </li>
+    <li>
+      The sentence begins with the dependent clause: In this case the verb-second rule applies, moving the subject of the main clause after the verb:
+      <table>
+        <tr>
+          <th>Clause 1</th>
+          <th>Clause 2</th>
+        </tr>
+        <tr>
+          <td>Weil die Polizei 
+          <td>Ich <span class="verb">muss</span> weit fahren<span class="comma">,</span></td>
+          <td>die Polizei jagt mir <span class="verb">sind.</span></td>
+        </tr>
+      </table>
+    </li>
+  </ol>
+</div></td><td class="popupMiddleRight"><div class="popupMiddleRightInner"></div></td></tr><tr class="popupBottom"><td class="popupBottomLeft"><div class="popupBottomLeftInner"></div></td><td class="popupBottomCenter"><div class="popupBottomCenterInner"></div></td><td class="popupBottomRight"><div class="popupBottomRightInner"></div></td></tr></tbody></table></div></div>
+{% endblock %}

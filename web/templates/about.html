@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block css %}
+<link rel="stylesheet" media="screen" type="text/css" href="{{MEDIA_URL}}css/about.css"/>
+{% endblock %}
+
+{% block content %}
+<h1>About Us</h1>
+<p>
+  langoLAB is like chatroulette for learning foreign languages: 
+  it endeavors to match learners with native speakers 
+  of the foreign language they're learning 
+  (in what will <em>hopefully</em> remain a G-rated environment!). 
+  We plan to provide 
+  gamelike interactions and tools 
+  to allow users to have fun and learn from their interactions as quickly 
+  as possible. langoLAB 
+  is constructed around the hypothesis that people will learn a foreign 
+  language more quickly when they're immersed in it through media and 
+  live interactions in which they can quickly perceive prelinguistic 
+  meaning and regularities. We aspire to facilitate the social accumulation 
+  of knowledge about foreign language, grammar, and lessons in a novel way, 
+  using a rich client interface to map this knowledge to the foreign 
+  language media.
+</p>
+<p>
+  Langolab is from the makers of <a href="http://videolangolab.com">videolangolab.com</a>.
+</p>
+<h1>Meet the Staff</h1>
+<img class="staff-photo" src="{{MEDIA_URL}}images/adam.jpeg" alt="Adam"/>
+<div class="staff-desc">
+  <h2>Adam Duston</h2>
+  <p>
+    Adam is a thoughtful and meticulous software craftsman and enjoys furiously 
+    creating useful software that is beautiful and well-organized. Adam studied 
+    Economics, Math, and Computer Science at the University of Chicago. Adam 
+    is really interested in improving his German speaking and listening comprehension 
+    skills, which is why he 
+    created langolab.com.
+  </p>
+</div>
+{% endblock %}

@@ -1,0 +1,3 @@
+abandon_lt_10
+abandon_10_30
+abandon_30_60

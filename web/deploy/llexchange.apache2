@@ -1,0 +1,39 @@
+<VirtualHost *:80>
+    ServerAdmin adam@8planes.com
+
+    ServerName langolab.com
+    ServerAlias www.langolab.com
+
+    RewriteEngine on
+
+    RewriteCond %{HTTP_HOST} ^langolab\.com [NC]
+    RewriteRule ^(.*)$ http://www.langolab.com$1 [R=301,L]
+
+    LogLevel warn
+    ErrorLog /home/llexchange/log/apache.error.log
+    CustomLog /home/llexchange/log/apache.custom.log combined
+
+    WSGIDaemonProcess llexchange user=llexchange group=www-data threads=2
+    WSGIProcessGroup llexchange
+
+    WSGIScriptAlias / /home/llexchange/llexchange/web/deploy/llexchange.wsgi
+
+    Alias /site_media /home/llexchange/llexchange/web/media/
+    <Location "/site_media">
+        SetHandler None
+        Order allow,deny
+        Allow from all
+    </Location>
+
+    Alias /favicon.ico /home/llexchange/llexchange/web/media/images/favicon.ico
+    <Location "/favicon.ico">
+        SetHandler None
+    </Location>
+
+    Alias /media /home/llexchange/env/lib/python2.6/site-packages/django/contrib/admin/media/
+    <Location "/media">
+        SetHandler None
+        Order allow,deny
+        Allow from all
+    </Location>
+</VirtualHost>

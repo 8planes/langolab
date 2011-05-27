@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+         xmlns:s="library://ns.adobe.com/flex/spark" 
+         xmlns:mx="library://ns.adobe.com/flex/mx" 
+         xmlns:views="ll.views.*">
+    <fx:Metadata>
+        [Event(name="complete", type="flash.events.Event")]
+    </fx:Metadata>
+    <s:VGroup id="_webcamGroup">
+        <s:Label color="#FF0000" fontSize="14" fontWeight="bold" text="when you see this, click &quot;Allow&quot; and" />
+        <s:Label color="#FF0000" fontSize="14" fontWeight="bold" text=" &quot;Remember&quot;, then &quot;Close&quot;"/>
+        <s:HGroup>
+            <mx:Image source="@Embed(source='../../../assets-security-clearance/webcam.png')"/>
+            <s:Button id="_webcamButton" label="okay, got it" click="showWebcamPanel()"/>
+        </s:HGroup>
+    </s:VGroup>
+    <fx:Script>
+        <![CDATA[
+            import ll.Logger;
+            import ll.external.OutgoingCalls;
+            private var _mic : Microphone;
+            private var _cam : Camera;
+            private var _timer : Timer;
+            
+            public function start() : void {
+                _mic = Microphone.getMicrophone();
+                _cam = Camera.getCamera();
+                if (!_mic || !_cam) {
+                    Logger.log("SecurityClearance: _mic is null: " + 
+                        (_mic == null));
+                    Logger.log("SecurityClearance: _cam is null: " + 
+                        (_cam == null));
+                }
+                else if (!_mic.muted && !_cam.muted)
+                    finished();
+                else
+                    if (_mic && _cam) {
+                        _mic.addEventListener(StatusEvent.STATUS, statusHandler);
+                        _cam.addEventListener(StatusEvent.STATUS, statusHandler);
+                    }
+            }
+            private function showWebcamPanel() : void {
+                if (_mic.muted || _cam.muted)
+                    Security.showSettings(SecurityPanel.PRIVACY);
+                else
+                    finished();
+            }
+            private function statusHandler(event : StatusEvent) : void {
+                var t : Timer = new Timer(1, 1);
+                t.addEventListener(TimerEvent.TIMER,
+                    function(event : TimerEvent) : void {
+                        if (_mic.muted || _cam.muted) {
+                            _webcamButton.label = "okay, got it";
+                        }
+                        else {
+                            _webcamButton.label = "okay, I did it!";
+                        }
+                        _mic.removeEventListener(StatusEvent.STATUS, statusHandler);
+                        _mic.addEventListener(StatusEvent.STATUS, statusHandler);
+                        _cam.removeEventListener(StatusEvent.STATUS, statusHandler);
+                        _cam.addEventListener(StatusEvent.STATUS, statusHandler);
+                    });
+                t.start();
+            }
+            private function finished() : void {
+                OutgoingCalls.track("/clear_flash_security");
+                this.dispatchEvent(new Event(Event.COMPLETE));
+            }
+        ]]>
+    </fx:Script>
+</s:Group>

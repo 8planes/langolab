@@ -1,0 +1,80 @@
+<div class="empty-form" style="display: none">
+  <li class="user_language">
+    {{ formset.empty_form.id }}
+    {{ formset.empty_form.language }}
+    <a href="#" class="small_close remove-language">Remove</a>
+    <div style="display: none" class="delete-checkbox">
+      {{ formset.empty_form.DELETE }}
+    </div>
+  </li>
+</div>
+
+<form id="user_language_form" method="POST" action=".">
+  {% csrf_token %}
+  {{ formset.management_form }}
+  {{ formset.non_field_errors }}
+  <ul class="language_list">
+    {% for form in formset.forms %}
+    <li class="user_language">
+      {{ form.non_field_errors }}
+      {{ form.id }}
+      {{ form.language }}
+      {% if not forloop.first %}
+         <a href="#" class="small_close remove-language">Remove</a>
+         <div style="display: none" class="delete-checkbox">
+           {{ form.DELETE }}
+         </div>
+      {% endif %}
+  </li>
+    {% endfor %}
+    <button class="green_button small add-language">
+      <span><span class="plus"></span>Add Language</span>
+    </button>
+  </ul>
+  <input type="hidden" name="languages_extra" id="languages_extra"/>
+</form>
+<script type="text/javascript">
+    var form_count = {{ formset.total_form_count }};
+    var empty_form = $('.empty-form').html();
+    var $form_count_field = $('#id_userlanguage_set-TOTAL_FORMS')
+    
+    //fix saving value by browser after refresh
+    $('.delete-checkbox input').attr('checked', false); 
+    $form_count_field.val(form_count);
+
+  $('.language_list .remove-language').live('click', function() {
+      $(this).parent().slideUp().find('.delete-checkbox input').attr('checked', true);
+      return false;
+  });
+
+    $('.add-language').click(function(){
+        form_count++;
+        $form_count_field.val(form_count);
+        var form = $(empty_form.replace(/__prefix__/g, form_count - 1 + ''));
+        form.hide();
+        $('.language_list li:last').after(form);
+        form.slideDown();
+        return false;
+    });
+
+  function languagesValidate() {
+      var valid = true;
+      $('.language_list .user_language').each(function() {
+          if (!valid) return;
+          if ($(this).css('display') != 'none') {
+              $(this).children('select').each(function() {
+                  if (!valid) return;
+                  if (!$(this).val()) {
+                      alert('Not all languages are completely specified');
+                      valid = false;
+                  }
+              });
+          }
+    });
+    return valid;
+  }
+
+    function languagesSubmit(opt_callback) {
+        $('#user_language_form').ajaxSubmit(opt_callback);
+    }
+</script>

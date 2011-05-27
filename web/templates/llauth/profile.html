@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+<form method="post" action="." enctype="multipart/form-data">
+  {% csrf_token %}
+  <table>
+    {% if form.email %}
+    <tr>
+      <td>My email address:</td>
+      <td>{{ form.email }}</td>
+    </tr>
+    {% endif %}
+    <tr>
+      <td>My native language:</td>
+      <td>{{ form.native_language }}</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><button><span>Save</span></button></td>
+    </tr>    
+  </table>
+  <input type="hidden" name="next" value="{{next}}"/>
+</form>
+{% endblock %}

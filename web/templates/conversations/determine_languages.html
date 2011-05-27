@@ -1,0 +1,22 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
+    <script type="text/javascript" src="{{MEDIA_URL}}js/jquery.form.js"></script>
+  </head>
+  <body>
+    <h2>Thanks for signing up! Now we need to know your languages to connect you with native speakers.</h2>
+    {% include 'llauth/_user_languages.html' %}
+    <a id="submitLanguages" href="#">Submit</a>
+    <script type="text/javascript">
+      $("#submitLanguages").click(function() {
+          if (languagesValidate()) {
+              // TODO: show spinner
+              languagesSubmit(function() {
+                  window.close();
+              });
+          }
+          return false;
+      });
+    </script>
+  </body>
+</html>

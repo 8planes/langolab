@@ -1,0 +1,69 @@
+{% extends "marketing/base.html" %}
+{% block css %}
+<link rel="stylesheet" media="screen" type="text/css" href="{{MEDIA_URL}}css/interaction.css"/>
+{% endblock %}
+{% block content %}
+<div class="leftCol">
+  <img src="{{MEDIA_URL}}images/sharon.png"/>
+  <div>
+    Anke, Germany 
+  </div>
+  <h3>Highest scores for today</h3>
+  <ul class="top-score-list">
+    <li class="top"><span class="scorer-name">Dieter</span> <span class="scorer-score">240</span></li>
+    <li><span class="scorer-name">Melinda</span> <span class="scorer-score">235</span></li>
+    <li><span class="scorer-name">John</span> <span class="scorer-score">160</span></li>
+    <li><span class="scorer-name">Casey</span> <span class="scorer-score">158</span></li>
+    <li><span class="scorer-name">Anke</span> <span class="scorer-score">140</span></li>
+  </ul>
+</div>
+<div class="rightCol">
+  <div>
+    <h2>Current Language: German</h2>
+    <h2>Current Game: 20 Questions</h2>
+  </div>
+  <div class="scores">
+    <div class="me"><span>You:</span> <span class="score">120</span></div>
+    <div class="other"><span>Anke:</span> <span class="score">140</span></div>
+  </div>
+  <div class="timer timer-notmuchtime">
+    <span class="time-left">Time left:</span> <span class="time">0:03</span>
+  </div>
+  <div class="conversation">
+    <div class="utterance">
+      <div class="name name-b">Johanna</div>
+      <div class="talk talk-b">Ist es etwas, das man fahren kann?</div>
+    </div>
+    <div class="utterance">
+      <div class="name name-a">Anke</div>
+      <div class="talk talk-a">Ja.</div>
+    </div>
+    <div class="utterance">
+      <div class="name name-b">Johanna</div>
+      <div class="talk talk-b">Es ist ein Auto?</div>
+    </div>
+    <div class="utterance">
+      <div class="name name-a">Anke</div>
+      <div class="talk talk-a">Nein.</div>
+    </div>
+    <div class="utterance">
+      <div class="name name-b">Johanna</div>
+      <div class="talk talk-b">Brauchen es Benzin, um zu fahren?</div>
+      <div class="talk talk-correction"><strong>Correction:</strong> Braucht es Benzin, um zu fahren?</div>
+    </div>
+    <div class="utterance">
+      <div class="name name-a">Anke</div>
+      <div class="talk talk-a">Nein.</div>
+    </div>
+    <div class="utterance">
+      <div class="name name-b">Johanna</div>
+      <div class="talk talk-b">Es ist ein Fahrrad?</div>
+    </div>
+    <div class="utterance">
+      <div class="name name-a">Anke</div>
+      <div class="talk talk-a">Ya, das ist korrect!</div>
+    </div>
+  </div>
+  <input class="chat-input" type="text"></input>
+</div>
+{% endblock %}

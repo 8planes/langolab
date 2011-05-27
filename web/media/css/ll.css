@@ -1,0 +1,445 @@
+html { 
+   height: 100%;
+   overflow:-moz-scrollbars-vertical;
+}
+body {
+   font-family: Arial, sans-serif;
+   background-color: #a4fbfb;
+   height: 100%;
+   margin: 0px;
+   padding: 0px;
+   font-size: 12px;
+   background-image: url('../images/bg-gradient.png');
+   background-repeat: repeat-x; 
+}
+a, div, object {
+  outline: none;
+}
+:-moz-any-link:focus {
+  outline: none;
+}
+.fixed-lg {
+   width: 980px;
+   margin: 0 auto;
+   position: relative;
+   padding: 0px 12px;
+}
+.clear:after {
+     visibility: hidden;
+     display: block;
+     font-size: 0;
+     content: " ";
+     clear: both;
+     height: 0;
+}
+.clear { display: inline-block; }
+* html .clear { height: 1%; }
+.clear { display: block; }
+#ll_nonFooter {
+   position: relative;
+   min-height: 100%;
+}
+* html #ll_nonFooter {
+   height: 100%;
+}
+#ll_content {
+   padding-bottom: 185px;
+}
+#ll_footer {
+   position: relative;
+   margin-top: -185px;
+   height: 185px;
+   overflow: hidden;
+   clear: both;
+   text-align: center;
+}
+.site-header {
+   height: 87px;
+   background: transparent url('../images/header-bg.png') repeat-x scroll top left;
+}
+.site-header img {
+   float: left;
+   margin-top: 14px;
+}
+.mainNavTab, .mainNavTabCap {
+   background-image: url('../images/buttons.png');
+}
+.mainNavTab {
+   display: block;
+   text-align: center;
+   float: right;
+   height: 75px;
+   padding: 0px 40px;
+   line-height: 75px;
+   background-position: 0px -350px;
+   color: white;
+   font-weight: bold;
+   font-size: 18px;
+   text-decoration: none;
+}
+.mainNavTab:hover {
+   background-position: 0px -425px;
+}
+.mainNavTabCap {
+   float: right;
+   height: 75px;
+   background-position: 0px -350px;
+}
+.gwt-DecoratorPanel .topLeft, .gwt-DecoratorPanel .topRight, .gwt-DecoratorPanel .bottomLeft, 
+.gwt-DecoratorPanel .bottomRight, .gwt-DecoratedPopupPanel .popupTopLeft, 
+.gwt-DecoratedPopupPanel .popupTopRight, .gwt-DecoratedPopupPanel .popupBottomLeft, 
+.gwt-DecoratedPopupPanel .popupBottomRight, .bottomLeft, .bottomRight {
+   background-image: url('../images/corners.png');
+}
+
+.gwt-DecoratorPanel .topCenter, .gwt-DecoratorPanel .bottomCenter, 
+.gwt-DecoratedPopupPanel .popupTopCenter, .gwt-DecoratedPopupPanel .popupBottomCenter, 
+.bottomCenter, .ll-TextDialog .bottomPanel, .ll-TabMenu, 
+.ll-WidgetTooltip .bottom {
+   background-image: url('../images/hborders.png');
+}
+
+.gwt-DecoratorPanel .middleLeft, .gwt-DecoratorPanel .middleRight, 
+.gwt-DecoratedPopupPanel .popupMiddleLeft, .gwt-DecoratedPopupPanel .popupMiddleRight, 
+.ll-DecoratorRowPanel .middleLeft, .ll-DecoratorRowPanel .middleRight {
+   background-image: url('../images/vborders.png');
+}
+
+.siteBox {
+   margin-top: 14px;
+}
+.siteBox .corner {
+   width: 5px;
+   height: 5px;
+}
+.siteBox .middleCenter {
+   background-color: white;
+   padding-bottom: 40px;
+}
+.siteBox .middleCenterInner {
+   width: 900px;
+   padding: 20px 40px 0;
+}
+.siteBox .topLeft {
+   background-position: -10px -30px;
+}
+.siteBox .topRight {
+   background-position: -10px -35px;
+}
+.siteBox .bottomLeft {
+   background-position: -15px -30px;
+}
+.siteBox .bottomRight {
+   background-position: -15px -35px;
+}
+.siteBox .topCenter {
+   background-position: 0px -128px;
+}
+.siteBox .bottomCenter {
+   background-position: 0px -133px;
+}
+.siteBox .middleLeft {
+   background-position: -70px 0px;
+}
+.siteBox .middleRight {
+   background-position: -75px 0px;
+}
+h1 {
+   color: #F60;
+   font-size: 30px;
+   font-weight: normal;
+   margin: 6px 0px;
+}
+h2 {
+   font-size: 16px;
+}
+h2 {
+   color: #039;
+}
+/* footer */
+
+.footerTop {
+   background: transparent url(../images/footer-elements.png) no-repeat scroll 130px 0;
+   height: 163px;
+   position: relative;
+}
+.speechBubble {
+   position: relative;
+   top: 56px;
+   left: 75px;
+}
+
+.speechBubble .twitter, .speechBubble .facebook {
+   float: left;
+   height: 49px;
+   cursor: pointer;
+}
+
+.speechBubble .twitter {
+   background: transparent url(../images/twitter-button.png) no-repeat scroll -1px 0;
+   width: 119px;
+}
+
+.speechBubble .twitter:hover {
+   background-position: -1px -49px;
+}
+
+.speechBubble .facebook {
+   background: transparent url(../images/facebook-button.png) no-repeat scroll 0 0;
+   width: 104px;
+}
+
+.speechBubble .facebook:hover {
+   background-position: 0 -49px;
+}
+
+.bird {
+   position: relative;
+   text-align: left;
+   top: 60px;
+   left: 35px;
+}
+
+#ll_bottomLinks {
+   position: relative;
+   top: 30px;
+}
+
+#ll_copyright {
+   color: #666;
+   font-size: 0.92em;
+   position: relative;
+   top: 40px;
+}
+
+#ll_bottomLinks span {
+   margin: 0 25px;
+}
+
+a.ll-FooterLink {
+   text-transform: uppercase;
+}
+.ll-LinkButton, .nyroModalClose:hover, .nyroModalCancel:hover {
+   text-decoration: none;
+   color: #009999;
+   font-weight: bold;
+}
+
+.ll-LinkButton:hover, .nyroModalClose, .nyroModalCancel {
+   color: #ff7800;
+   text-decoration: none;
+   font-weight: bold;
+}
+
+#leftCol {
+   float: left;
+   margin-right: 12px;
+   width: 400px;
+}
+
+
+#leftCol p{
+padding: 0 30px 0 0;
+}
+
+#rightCol {
+   float: left;
+   width: 480px;
+   margin-top:17px;
+}
+
+#rightPanel {
+   padding: 22px;
+   border: solid 1px #ccc;
+   -moz-border-radius: 5px;
+   -webkit-border-radius:5px;   
+}
+
+#rightPanel p {
+   padding-top: 5px;
+   margin: 0 0 20px;
+}
+
+
+label {
+   display: block;
+   float: left;
+   width: 100px;
+   text-align: right;
+   color: #666;
+   font-weight: bold;
+   height: 27px;
+   line-height: 27px;
+}
+
+#ll_textBoxes .input {
+   margin-bottom: 10px;
+}
+
+#ll_textBoxes input {
+   display: block;
+   margin-left: 110px;
+   width: 300px;
+   border: 1px solid #CECECE;
+   padding: 4px;
+   height: 17px;
+   font-family: Arial,sans-serif;
+   font-size: 12px;
+}
+
+#ll_textBoxes input:hover {
+   border-color: #009999;
+}
+
+
+.button {
+   float: right;
+   margin: 0 18px 10px 0;
+   font-size: 11px;
+   text-transform: uppercase;
+}
+
+ul li {
+   line-height: 1.5em;
+   margin-bottom: 10px;
+   padding: 0 30px 0 0;
+}
+
+p {
+   line-height: 1.5em;
+}
+
+.pointslist li {
+   list-style: none outside none;
+   margin-top: 10px;
+}
+
+.pointslist {
+   padding-left: 0;
+}
+
+.pointslist img {
+   border: none;
+}
+
+.pointslist div {
+   margin: 20px 0 0 166px;
+}
+
+.pointslist a {
+   display: block;
+   float: left;
+margin: 0 20px 0 0;
+}
+
+.pointslist a img{
+padding: 4px;
+background: #eee;
+   border: solid 1px #ddd;
+}
+
+
+.pointslist a:hover img{
+   background: #ea6f2d;
+   border: solid 1px #c7591e;
+}
+
+.hintDialog {
+   position: absolute;
+   display: none;
+   top: -10px;
+   left: 690px;
+}
+
+.hintDialog .popupContent {
+   padding: 4px;
+}
+
+.hintDialog .popupTopLeft {
+   background-position: -15px 0;
+   height: 30px;
+   width: 10px;
+}
+
+.hintDialog .popupTopCenter {
+   background-position: -178px -25px;
+   height: 30px;
+}
+
+.hintDialog .popupTopRight {
+   background-position: -25px 0;
+   height: 30px;
+   width: 10px;
+}
+
+.hintDialog .popupMiddleLeft {
+   background-position: -50px 0;
+   width: 10px;
+}
+
+.hintDialog .popupMiddleCenter {
+   background-color: white;
+}
+
+.hintDialog .popupMiddleRight {
+   background-position: -60px 0;
+   width: 10px;
+}
+
+.hintDialog .popupBottomLeft {
+   background-position: 0 -20px;
+   height: 10px;
+   width: 10px;
+}
+
+.hintDialog .popupBottomCenter {
+   background-position: 0 -55px;
+   height: 10px;
+}
+
+.hintDialog .popupBottomRight {
+   background-position: 0 -30px;
+   height: 10px;
+   width: 10px;
+}
+
+.share {
+   margin-top: 14px;
+   margin-left: 12px;
+}
+
+a.share {
+   margin: 0;
+   display: block;
+   float: left;
+   height: 47px;
+   background: url('../images/buttons-etc.png') left no-repeat;
+   text-decoration: none;
+}
+
+a.fb-share {
+   width: 190px;
+   background-position: left -317px;
+}
+
+a.fb-share:hover {
+   background-position: left -364px;
+}
+
+a.tw-share {
+   margin-left: 12px;
+   width: 186px;
+   background-position: left -219px;
+}
+
+a.tw-share:hover {
+   background-position: left -266px;
+}
+
+a.share span {
+   visibility: hidden;
+}
+
+div.user-status {
+   margin-bottom: 12px;
+}

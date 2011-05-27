@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block css %}
+<link rel="stylesheet" media="screen" type="text/css" href="{{MEDIA_URL}}css/conversations.css"/>
+{% endblock %}
+
+{% block content %}
+<div class="swfcontainer">
+  <div id="swf"></div>
+</div>
+<div class="right">
+  <div id="status"></div>
+  <a id="nextLink" href="javascript:void();" style="display: none">NEXT</a>
+  <div id="waitingExplanation" style="display: none">
+    <p>
+      We don't have enough people 
+      yet to make the system really work. If you have bug reports, feedback, or ideas about how to get the site started, please
+      visit our discussion group: <a href="http://groups.google.com/group/langolab-users" target="discussion">http://groups.google.com/group/langolab-users</a>.
+    </p>
+    <p>
+      Here are speakers that would have matched with 
+      you that visited over the last 5 days.
+    </p>
+  </div>
+  <div id="chart" style="display: none; width: 420px; height: 240px;"></div>
+  <div id="share" style="display: none">
+    <h3>The best way to get more language learners to the site is by telling everyone about it. Please help us spread the word!</h3>
+    <div class="share">
+      <a class="share fb-share fb-sharesite" href="javascript:void();"><span>Share on Facebook</span></a>
+      <a class="share tw-share tw-sharesite" href="javascript:void();"><span>Share on Twitter</span></a>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ block.super }}
+<!--[if IE]>
+  <script type="text/javascript" src="{{MEDIA_URL}}js/excanvas.js"></script>
+<![endif]-->
+<script type="text/javascript" src="{{MEDIA_URL}}js/share.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
+<script type="text/javascript">
+  var config = {
+      swfURL: '{{MEDIA_URL}}swf/llexchange.swf',
+      flashVars: {{flash_vars|safe}},
+      languages: {{languages_json|safe}},
+      dygraphJS: '{{MEDIA_URL}}js/dygraph-combined.js',
+      rpcURL: '/rpc/'
+  };
+</script>
+{% if not js_debug %}
+  <script type="text/javascript" src="{{MEDIA_URL}}js/llexchange-compiled.js"></script>
+{% else %}
+  <script type="text/javascript" src="{{MEDIA_URL}}js/closure/goog/base.js"></script>
+  <script type="text/javascript">
+    goog.require('goog.debug.Logger');
+    goog.require('goog.debug.FancyWindow');
+    goog.require('goog.ui.Component');
+  </script>
+  {% for script in scripts %}
+    <script type="text/javascript" src="{{MEDIA_URL}}js/{{script}}"></script>
+  {% endfor %}
+{% endif %}
+{% endblock %}

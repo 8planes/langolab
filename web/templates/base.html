@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>Dual Immersion Platform - langoLAB</title>
+    {# necessary for fucking dygraph #}
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7; IE=EmulateIE9">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <meta name="keywords" content=""/>
+    <link rel="image_src" href="{{MEDIA_URL}}images/logo.jpg"/>
+    <link rel="stylesheet" media="screen" type="text/css" href="{{MEDIA_URL}}css/ll.css"/>
+    {% block css %}{% endblock %}
+    <link rel="shortcut icon" type="image/icon" href="/favicon.ico" />
+  </head>
+  <body>
+    <div id="ll_nonFooter">
+      <div id="ll_content">
+        <div class="site-header">
+          <div class="fixed-lg">
+            <img class="logo" src="{{MEDIA_URL}}images/ll-logo-header.png"/>
+            {% block headerright %}{% endblock %}
+          </div>
+        </div>
+        <div class="fixed-lg main-content">
+          <table cellspacing="0" cellpadding="0" class="siteBox gwt-DecoratorPanel">
+            <tr class="top"><td class="topLeft"><div class="corner topLeftInner"></div></td><td class="topCenter"><div class="topCenterInner"></div></td><td class="topRight"><div class="corner topRightInner"></div></td></tr>
+            <tr class="middle"><td class="middleLeft"><div class="middleLeftInner"></div></td><td class="middleCenter">
+                <div class="middleCenterInner">
+                  {% if user.is_authenticated %}
+                  <div class="user-status">logged in as {{ user }} <a href="{% url logout %}?next={% url conversations:index %}">logout</a></div>
+                  {% endif %}
+                  {% block content %}{% endblock %}
+                </div>
+              </td><td class="middleRight"><div class="middleRightInner"></div></td></tr>
+            <tr class="bottom"><td class="bottomLeft"><div class="corner bottomLeftInner"></div></td><td class="bottomCenter"><div class="bottomCenterInner"></div></td><td class="bottomRight"><div class="corner bottomRightInner"></div></td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div id="ll_footer" class="fixed-lg">
+      <div class="footerTop">
+        <div class="speechBubble clear">
+          <div class="twitter" onclick="window.open('http://www.twitter.com/langolab', 'twitterLL');">&nbsp;</div>
+          <div class="facebook" onclick="window.open('http://www.facebook.com/langoLAB', 'fbLL');">&nbsp;</div>
+        </div>
+        <div class="bird">
+          <img src="{{MEDIA_URL}}images/bird-footer.png" />
+        </div>
+        <div id="ll_bottomLinks" class="clear">
+          <span><a class="ll-FooterLink ll-LinkButton" href="{% url about %}">About</a></span>
+          <span><a class="ll-FooterLink ll-LinkButton" href="http://blog.langolab.com">Blog</a></span>
+          <span><a class="ll-FooterLink ll-LinkButton" href="{% url contact %}">Contact</a></span>
+        </div>
+        <div id="ll_copyright">
+          <span>&copy; Copyright 2011 <b>LangoLAB, LLC</b> All Rights Reserved</span>
+        </div>
+      </div>
+    </div>
+  </body>
+  {% block scripts %}
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
+  {% endblock %}
+  <script type="text/javascript" charset="utf-8">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', "UA-4038971-3"]);
+    _gaq.push(['_trackPageview']);
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = 'http://www.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+    var FACEBOOK_APP_ID = '{{facebook_app_id}}';
+    var POPUP_REDIRECT_URL = 'http://www.langolab.com{% url conversations:closewindow %}';
+    var FB_IMAGE = '{{MEDIA_URL}}images/logo.jpg';
+  </script>
+</html>

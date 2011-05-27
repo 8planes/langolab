@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+Made it in!
+{% include 'llauth/_user_languages.html' %}
+<a href="#" onclick="regularConversation(); return false;">Start regular conversation</a><br/>
+<a href="#" onclick="twentyQuestions(); return false;">Start 20 questions</a>
+<script>
+  function regularConversation() {
+    if (languagesValidate()) {
+        window.location = 
+            ['{% url conversations:waiting %}?native=', 
+             nativeLanguage(), 
+             '&foreign=',
+             foreignLanguages().join(',')].join('');
+    }
+  }
+  function twentyQuestions() {
+    alert('Coming soon!');
+  }
+</script>
+{% endblock %}

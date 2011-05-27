@@ -1,0 +1,32 @@
+<html>
+  <head>
+  </head>
+  <body>
+    <input type="text" id="input"/><a href="#" onclick="okClicked(); return false;">ok</a>
+    <div id="swf"></swf>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
+    <script type="text/javascript">
+      var flashVars = { 
+          "cirrus_url": "rtmfp://p2p.rtmfp.net/7bbaaf24e9c7e6ba4c405591-3c650c743f5a/", 
+          "stomp_server": "ll.example.com", 
+          "stomp_login": "reader", 
+          "stomp_password": "reader", 
+          "stomp_subscribe_destination": "/user/1", 
+          "stomp_port": 61613};
+      swfobject.embedSWF('{{MEDIA_URL}}swf/llexchange.swf', 'swf', '480', '440', '10.1.0', null,
+          flashVars, { 'allowScriptAccess': 'always', 'wmode': 'transparent' }, {'id': 'theswf'});
+      swfout = {};
+      swfout.stateChange = function() {};
+      swfout.ready = function() {};
+      swfout.messageReceived = function() {};
+      swfout.matchMessageReceived = function() {};
+      swfout.flashDebug = function(message) {
+          console.log(message);
+      };
+      function okClicked() {
+          var nearID = document.getElementById('input').value;
+          document.getElementById('theswf').matchWith(nearID);
+      }
+    </script>
+  </body>
+</html>

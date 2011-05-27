@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:HGroup xmlns:fx="http://ns.adobe.com/mxml/2009" 
+          xmlns:s="library://ns.adobe.com/flex/spark" 
+          xmlns:mx="library://ns.adobe.com/flex/mx" 
+          initialize="init()">
+    <s:Group width="320" height="240">
+    <s:Rect x="0" y="0" 
+       height="100%" width="100%">
+       <s:stroke>
+           <s:LinearGradientStroke weight="1" scaleMode="normal"/>
+       </s:stroke>
+    </s:Rect>
+       <mx:VideoDisplay id="_remoteVideoDisplay" width="320" height="240"/>
+    </s:Group>
+    <mx:VideoDisplay id="_localVideoDisplay" width="180" height="135"/>
+    <fx:Script>
+        <![CDATA[
+            import ll.LocalStorage;
+            import ll.Logger;
+            import ll.external.Config;
+            import ll.external.IncomingCalls;
+            import ll.external.MatchEndedEvent;
+            import ll.external.MatchEvent;
+
+            private var _incomingStream : NetStream;
+            private var _outgoingStream : NetStream;
+            private var _netConnection : NetConnection;
+            private var _micIndex : uint;
+            private var _camIndex : uint;
+            private var _remoteVideo : Video;
+            
+            private function init() : void {
+                IncomingCalls.instance.addEventListener(
+                    MatchEndedEvent.MATCH_ENDED,
+                    matchEnded);
+                IncomingCalls.instance.addEventListener(
+                    MatchEvent.MATCH,
+                    matchStarted);
+            }
+            private function matchEnded() : void {
+                if (_incomingStream)
+                    tearDownIncomingStream();
+            }
+            private function matchStarted(event : MatchEvent) : void {
+                Logger.log("matchStarted with " + event.matchID);
+                if (!_outgoingStream)
+                    setUpOutgoingStream();
+                if (_incomingStream)
+                    tearDownIncomingStream();
+                setUpIncomingStream(event.matchID);
+            }
+            private function setUpOutgoingStream() : void {
+                _outgoingStream = new NetStream(
+                    _netConnection, NetStream.DIRECT_CONNECTIONS);
+                _outgoingStream.addEventListener(
+                    NetStatusEvent.NET_STATUS, outgoingStreamHandler);
+                _outgoingStream.publish("caller");
+                _outgoingStream.attachAudio(
+                    Microphone.getMicrophone(_micIndex));
+                _outgoingStream.attachCamera(
+                    Camera.getCamera(_camIndex.toString()));
+            }
+            private function tearDownIncomingStream() : void {
+                _incomingStream.close();
+                _incomingStream.removeEventListener(
+                    NetStatusEvent.NET_STATUS, incomingStreamHandler);
+                if (_remoteVideo && _remoteVideoDisplay.contains(_remoteVideo))
+                    _remoteVideoDisplay.removeChild(_remoteVideo);
+                _incomingStream = null;
+            }
+            private function setUpIncomingStream(matchID : String) : void {
+                _incomingStream = new NetStream(_netConnection, matchID);
+                _incomingStream.addEventListener(
+                    NetStatusEvent.NET_STATUS, incomingStreamHandler);
+                _incomingStream.play("caller");
+                Logger.log("setting up video");
+                _remoteVideo = new Video();
+                _remoteVideo.width = 320;
+                _remoteVideo.height = 240;
+                _remoteVideo.attachNetStream(_incomingStream);
+                _remoteVideoDisplay.addChild(_remoteVideo);
+            }
+            public function start(netConnection : NetConnection) : void {
+                _netConnection = netConnection;
+                var mic : Microphone = Microphone.getMicrophone();
+                if (mic) {
+                    mic.setSilenceLevel(0);
+                    mic.framesPerPacket = 1;
+                    mic.gain = 50;
+                    mic.addEventListener(StatusEvent.STATUS, onDeviceStatus);
+                    mic.addEventListener(ActivityEvent.ACTIVITY, onDeviceActivity);
+                }
+                var camera : Camera = Camera.getCamera();
+                if (camera) {
+                    camera.addEventListener(StatusEvent.STATUS, onDeviceStatus);
+                    if (mic)
+                        mic.addEventListener(ActivityEvent.ACTIVITY, onDeviceActivity);
+                    camera.setMode(320, 240, 15);
+                    camera.setQuality(0, 80);
+                    _localVideoDisplay.attachCamera(camera);
+                }
+            }
+            private function onDeviceStatus(e : StatusEvent) : void {
+                Logger.log("Device status: " + e.code);
+            }
+            private function onDeviceActivity(e : ActivityEvent) : void {
+                
+            }
+            private function outgoingStreamHandler(event : NetStatusEvent) : void {
+                Logger.log("Outgoing stream event: " + event.info.code);
+            }
+            private function incomingStreamHandler(event : NetStatusEvent) : void {
+                Logger.log("Incoming stream event: " + event.info.code);
+            }
+            
+        ]]>
+    </fx:Script>
+</s:HGroup>

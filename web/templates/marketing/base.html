@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" xmlns:fb="http://www.facebook.com/2008/fbml">
+  <head>
+    <title>Dual Immersion Platform - langoLAB</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <meta name="keywords" content=""/>
+    <meta property="fb:page_id" content="51317678400" />
+    <link rel="image_src" href="{{MEDIA_URL}}images/logo.jpg"/>
+    <link rel="stylesheet" media="screen" type="text/css" href="{{MEDIA_URL}}css/ll.css"/>
+    <link rel="shortcut icon" type="image/icon" href="/favicon.ico" />
+    {% block css %}{% endblock %}
+    <script charset="utf-8" type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.0/jquery.min.js"></script>
+    {% block js %}{% endblock %}
+  </head>
+  <body>
+    <div id="ll_nonFooter">
+      <div id="ll_content">
+        <div class="site-header">
+          <div class="fixed-lg">
+            <img class="logo" src="{{MEDIA_URL}}images/ll-logo-header.png"/>
+            {% if not hide_nav %}
+              <div class="mainNavTabCap">&nbsp;</div>
+              <a class="mainNavTab" href="http://videolangolab.com">Langolab Videos</a>
+            {% endif %}
+          </div>
+        </div>
+        <div class="fixed-lg main-content">
+          <table cellspacing="0" cellpadding="0" class="siteBox gwt-DecoratorPanel">
+            <tr class="top"><td class="topLeft"><div class="corner topLeftInner"></div></td><td class="topCenter"><div class="topCenterInner"></div></td><td class="topRight"><div class="corner topRightInner"></div></td></tr>
+            <tr class="middle"><td class="middleLeft"><div class="middleLeftInner"></div></td><td class="middleCenter">
+                <div class="middleCenterInner">
+                  {% block content %}{% endblock %}
+                </div>
+              </td><td class="middleRight"><div class="middleRightInner"></div></td></tr>
+            <tr class="bottom"><td class="bottomLeft"><div class="corner bottomLeftInner"></div></td><td class="bottomCenter"><div class="bottomCenterInner"></div></td><td class="bottomRight"><div class="corner bottomRightInner"></div></td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div id="ll_footer" class="fixed-lg">
+      <div class="footerTop">
+        <div class="speechBubble clear">
+          <div class="twitter" onclick="window.open('http://www.twitter.com/langolab', 'twitterLL');">&nbsp;</div>
+          <div class="facebook" onclick="window.open('http://www.facebook.com/langoLAB', 'fbLL');">&nbsp;</div>
+        </div>
+        <div class="bird">
+          <img src="{{MEDIA_URL}}images/bird-footer.png" />
+        </div>
+        <div id="ll_bottomLinks" class="clear">
+          <span><a class="ll-FooterLink ll-LinkButton" href="/about">About</a></span>
+          <span><a class="ll-FooterLink ll-LinkButton" href="http://blog.langolab.com">Blog</a></span>
+          <span><a class="ll-FooterLink ll-LinkButton" href="/contact">Contact</a></span>
+        </div>
+        <div id="ll_copyright">
+          <span>&copy; Copyright 2010 <b>LangoLAB, LLC</b> All Rights Reserved</span>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script type="text/javascript" charset="utf-8" src="http://www.google-analytics.com/ga.js"></script> 
+  <script type="text/javascript" charset="utf-8">
+    window.pageTracker = _gat._getTracker("UA-4038971-3");
+    window.pageTracker._initData();
+    window.pageTracker._trackPageview();
+  </script> 
+</html>

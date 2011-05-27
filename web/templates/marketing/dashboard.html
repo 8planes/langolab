@@ -1,0 +1,44 @@
+{% extends "marketing/base.html" %}
+{% block css %}
+<link rel="stylesheet" media="screen" type="text/css" href="{{MEDIA_URL}}css/dashboard.css"/>
+{% endblock %}
+{% block content %}
+<h2>Session Record for Forrest Brown</h2>
+<div class="clear">
+  <img class="student-image" src="{{MEDIA_URL}}images/forrest.png"/>
+  <div class="student-description">
+    <strong>Student:</strong> Forrest Brown<br/>
+    <strong>Student ID:</strong> 88-22-41<br/>
+    <strong>Sessions Logged:</strong> 42<br/>
+    <strong>Time Logged:</strong> 38:52:34
+  </div>
+</div>
+<h2>Recent Sessions</h2>
+<div class="session clear">
+  <img class="session-image" src="{{MEDIA_URL}}images/jurgen.jpg"/>
+  <div class="session-description">
+    Jürgen Schiller<br/>
+    October 15 at 8:42am<br/>
+    42 minutes, 38 seconds
+  </div>
+  <div class="session-snippet">
+    Ist es etwas, das man fahren kann?<br/>
+    Es ist ein Auto?...<br/>
+    <a class="ll-LinkButton" href="#">View full transcript</a>
+  </div>
+</div>
+<div class="session clear">
+  <img class="session-image" src="{{MEDIA_URL}}images/lola.jpg"/>
+  <div class="session-description">
+    Lola Müller<br/>
+    October 14 at 8:36am<br/>
+    49 minutes, 12 seconds
+  </div>
+  <div class="session-snippet">
+    Ist es etwas, das man fahren kann?<br/>
+    Es ist ein Auto?...<br/>
+    <a class="ll-LinkButton" href="#">View full transcript</a>    
+  </div>
+</div>
+<a class="ll-LinkButton" href="#">See earlier sessions...</a>
+{% endblock %}
