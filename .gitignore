@@ -2,6 +2,7 @@
 *~
 *.pyc
 *.sqlite3
+closure
 settings_local.py
 llexchange.swf
 llexchange-compiled.js
