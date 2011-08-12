@@ -150,6 +150,7 @@ INSTALLED_APPS = (
     'llauth',
     'socialauth',
     'marketing',
+    'scheduling',
     'south',
     'openid_consumer',
     'django.contrib.auth',
