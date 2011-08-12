@@ -34,7 +34,6 @@ urlpatterns = patterns(
     (r'^llauth/', include('llauth.urls', namespace='llauth')),
     (r'^admin/', include(admin.site.urls)),
     (r'^socialauth/', include('socialauth.urls')),
-    (r'', include('conversations.urls', namespace='conversations')),
     url(r'^logout/', 'django.contrib.auth.views.logout', name='logout'),
 )
 
@@ -47,3 +46,7 @@ if settings.DEBUG:
          {'document_root': settings.MEDIA_ROOT, 
           'path': 'images/favicon.ico', 
           'show_indexes': True}))
+
+urlpatterns += patterns(
+    '',
+    (r'', include('conversations.urls', namespace='conversations')),)

@@ -1,3 +1,40 @@
+This repository is the code for the langolab project (http://langolab.com)
+
+To run the development version:
+
+1. Git clone the repository version:
+
+       git clone git://github.com/8planes/langolab.git langolab
+
+   Now the entire project will be in the langolab directory.
+
+2. Install virtualenv http://pypi.python.org/pypi/virtualenv . On
+   debian-based systems, just 
+   "sudo apt-get install python-virtualenv"
+
+3. (optional) download and download the virtualenv wrapper bash
+   functions http://www.doughellmann.com/projects/virtualenvwrapper/
+
+4. Create a virtual environment and activate it. Here is how to do it 
+   *without* the virtualenv wrapper. Run these commands from the parent 
+   of the langolab directory created in #1:
+
+   $ virtualenv langolab-env
+   $ source langolab-env/bin/activate
+
+   If you're using the virtualenv wrapper (run from any directory):
+
+   $ mkvirtualenv langolab
+   $ workon langolab
+
+5. run:
+   $ easy_install -U setuptools
+   $ easy_install pip
+   $ cd web/deploy
+   # this is the langolab directory you cloned from git, not the parent you created the virtualenv in.
+   $ pip install -r requirements.txt
+
+6. 
 
 
 To deploy:
