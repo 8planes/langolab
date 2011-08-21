@@ -34,8 +34,53 @@ To run the development version:
    # this is the langolab directory you cloned from git, not the parent you created the virtualenv in.
    $ pip install -r requirements.txt
 
-6. 
+6. Check out google closure into directory of your choice: svn checkout 
+   http://closure-library.googlecode.com/svn/trunk/ <directory>. Then 
+   symlink media/js/closure to the closure directory of the checkout 
+   location. From the langolab directory in step 1:
 
+   $ cd web/media/js
+   $ ln -s <google closure checkout directory>/closure closure
+
+7. Add llexchange.example.com to your hosts file, pointing at 127.0.0.1. 
+   This is necessary for Facebook and Twitter oauth to work correctly.
+
+8. From the langolab/web directory, first create the database with
+
+       python manage.py syncdb --all
+
+   Then run south migrations with
+
+       python manage.py migrate --fake
+
+   Then run the site with:
+
+       ./dev-runserver.sh
+
+9. If you want to access the Flash player in the conversation page, you'll have 
+   to compile the swf. I'm fucking tired of writing instructions so I'll write 
+   these later :)
+
+10. Start the Flash policy file server. The Langolab swf makes a direct tcp/ip 
+    connection to the server so that it can get live "pushed" updates. 
+    Unfortunately Adobe requires that the site serve a socket policy file on 843 --
+    see http://www.adobe.com/devnet/flashplayer/articles/socket_policy_files.html 
+    for more details. We included the development flash policy daemon in the repo.
+    Just go to the langolab/bin directory and run
+
+        sudo ./flashpolicyd.sh
+
+    You can run this in a terminal of its own or you can fork the process by 
+    appending an ampersand:
+
+        sudo ./flashpolicyd.sh &
+
+    Note: when you append ampersand, your system might ask for your sudo password
+    in the forked process. You can check to see if it's really running by running
+
+        sudo ps auxw | grep flashpolicy
+
+11. Start morbidq. Done!
 
 To deploy:
 
