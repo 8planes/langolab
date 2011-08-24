@@ -3,12 +3,20 @@
   <head>
     {% block css %}{% endblock %}
     <script type="text/javascript" src="{{MEDIA_URL}}js/closure/goog/base.js"></script>
+    <script type="text/javascript" src="{{MEDIA_URL}}js/ll-deps.js"></script>
     <script type="text/javascript">
       goog.require('goog.debug.Logger');
       goog.require('goog.debug.FancyWindow');
       goog.require('goog.ui.Component');
     </script>
-    {% block scripts %}{% endblock %}
+    <script type="text/javascript">
+      var debugWindow = new goog.debug.FancyWindow('main');
+      debugWindow.setEnabled(true);
+      debugWindow.init();
+    </script>
+    <script type="text/javascript">
+      {% block requires %}{% endblock %}
+    </script>
   </head>
   <body>
     {% block content %}{% endblock %}

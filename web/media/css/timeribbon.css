@@ -1,0 +1,22 @@
+.ll-timeribbon {
+   height: 100px;
+   width: 400px;
+}
+
+.ll-timeribbon div {
+   height: 100px;
+   width: 4px;
+   float: left;
+}
+
+.ll-timeribbon div.daydiv {
+   border-left: 1px solid gray;
+}
+
+.ll-timeribbon div.endday {
+   border-right: 1px solid gray;
+}
+
+.ll-timeribbon div.dayover {
+   background-color: #999999;
+}

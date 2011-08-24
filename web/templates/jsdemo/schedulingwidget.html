@@ -1,7 +1,9 @@
 {% extends "jsdemo/base.html" %}
-{% block scripts %}
-<script type="text/javascript" src="{{MEDIA_URL}}js/base.js"></script>
-<script type="text/javascript" src="{{MEDIA_URL}}js/conversations/schedulingwidget.js"></script>
+{% block css %}
+<link rel="stylesheet" media="screen" type="text/css" href="{{MEDIA_URL}}css/timeribbon.css"/>
+{% endblock %}
+{% block requires %}
+  goog.require('ll.SchedulingWidget');
 {% endblock %}
 {% block content %}
 <div id="div"></div>

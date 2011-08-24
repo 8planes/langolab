@@ -19,9 +19,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 goog.provide('ll.SchedulingWidget');
 
 goog.require('ll');
+goog.require('ll.TimeRibbon');
+
 
 ll.SchedulingWidget = function() {
     goog.ui.Component.call(this);
     
 };
 goog.inherits(ll.SchedulingWidget, goog.ui.Component);
+
+ll.SchedulingWidget.prototype.createDom = function() {
+    ll.SchedulingWidget.superClass_.createDom.call(this);
+    this.timeRibbon_ = new ll.TimeRibbon();
+    this.addChild(this.timeRibbon_, true);
+    
+};
