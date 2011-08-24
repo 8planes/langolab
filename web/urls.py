@@ -28,11 +28,10 @@ urlpatterns = patterns(
         {'template':'about.html'}, name="about"),
     url(r'^contact/', 'django.views.generic.simple.direct_to_template', 
         {'template':'contact.html'}, name="contact"),
-    url(r'^calendar/', 'django.views.generic.simple.direct_to_template', 
-        {'template':'calendar.html'}, name="calendar"),
     (r'^for_teachers/', include('marketing.urls', namespace="marketing")),
     (r'^llauth/', include('llauth.urls', namespace='llauth')),
     (r'^admin/', include(admin.site.urls)),
+    (r'^jsdemo/(\w+)', 'jsdemo.views.jsdemo'),
     (r'^socialauth/', include('socialauth.urls')),
     url(r'^logout/', 'django.contrib.auth.views.logout', name='logout'),
 )

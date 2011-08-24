@@ -1,0 +1,14 @@
+{% extends "jsdemo/base.html" %}
+{% block scripts %}
+<script type="text/javascript" src="{{MEDIA_URL}}js/base.js"></script>
+<script type="text/javascript" src="{{MEDIA_URL}}js/conversations/schedulingwidget.js"></script>
+{% endblock %}
+{% block content %}
+<div id="div"></div>
+<script type="text/javascript">
+  var widget = new ll.SchedulingWidget();
+  var component = new goog.ui.Component();
+  component.decorate(goog.dom.getElement('div'));
+  component.addChild(widget, true);
+</script>
+{% endblock %}
