@@ -137,7 +137,7 @@ ll.TimeRibbon.prototype.hourMouseOver_ = function(index, e) {
         }
         else {
             for (var i = startIndex; i <= endIndex; i++) {
-                this.removeFromExistingRange_(index);
+                this.removeFromExistingRange_(i);
             }
         }
         this.coalesceSelectedRanges_();

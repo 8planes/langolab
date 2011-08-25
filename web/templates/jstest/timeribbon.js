@@ -112,5 +112,16 @@ function testSelectThenGoBack() {
     assertRanges([[3, 4]]);
 }
 
+function testUnselectSkipping() {
+    timeribbon.render();
+
+    mouseDownAndOut(3);
+    mouseOverAndUp(5);
+    mouseDownAndOut(5);
+    mouseOverAndUp(3);
+
+    assertRanges([]);
+}
+
 
 {% endblock %}
