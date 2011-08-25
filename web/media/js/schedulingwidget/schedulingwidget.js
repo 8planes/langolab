@@ -18,7 +18,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 goog.provide('ll.SchedulingWidget');
 
-goog.require('ll');
 goog.require('ll.TimeRibbon');
 
 
@@ -28,9 +27,35 @@ ll.SchedulingWidget = function() {
 };
 goog.inherits(ll.SchedulingWidget, goog.ui.Component);
 
+ll.SchedulingWidget.prototype.getContentElement = function() {
+    return this.contentElement_;
+};
+
 ll.SchedulingWidget.prototype.createDom = function() {
     ll.SchedulingWidget.superClass_.createDom.call(this);
+    this.c_ = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
+    this.contentElement_ = this.c_('div');
+    this.scheduleTextDiv_ = this.c_('div');
+    goog.dom.append(
+        this.getElement(), this.contentElement_, this.scheduleTextDiv_);
     this.timeRibbon_ = new ll.TimeRibbon();
     this.addChild(this.timeRibbon_, true);
-    
+};
+
+ll.SchedulingWidget.prototype.enterDocument = function() {
+    ll.SchedulingWidget.superClass_.enterDocument.call(this);
+    this.getHandler().listen(
+        this.timeRibbon_,
+        ll.TimeRibbon.RANGES_CHANGED,
+        this.rangesChanged_);
+};
+
+ll.SchedulingWidget.prototype.rangesChanged_ = function(e) {
+    var ranges = this.timeRibbon_.getSelectedRanges();
+    goog.dom.removeChildren(this.scheduleTextDiv_);
+    var ul = this.c_('ul');
+    for (var i = 0; i < ranges.length; i++) {
+        goog.dom.append(ul, this.c_('li', null, this.timeRibbon_.textForRange(ranges[i])));
+    }
+    goog.dom.append(this.scheduleTextDiv_, ul);
 };

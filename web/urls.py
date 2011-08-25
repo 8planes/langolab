@@ -32,6 +32,7 @@ urlpatterns = patterns(
     (r'^llauth/', include('llauth.urls', namespace='llauth')),
     (r'^admin/', include(admin.site.urls)),
     (r'^jsdemo/(\w+)', 'jsdemo.views.jsdemo'),
+    (r'^jstest/(\w+)', 'jstest.views.jstest'),
     (r'^socialauth/', include('socialauth.urls')),
     url(r'^logout/', 'django.contrib.auth.views.logout', name='logout'),
 )

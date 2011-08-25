@@ -3,7 +3,7 @@
    width: 400px;
 }
 
-.ll-timeribbon div {
+.ll-timeribbon div.hour {
    height: 100px;
    width: 4px;
    float: left;
@@ -19,4 +19,14 @@
 
 .ll-timeribbon div.dayover {
    background-color: #999999;
+}
+
+.ll-timeribbon div.selected {
+   background-color: red;
+}
+
+.ll-timeribbon span.day {
+   display: inline-block;
+   width: 97px;
+   text-align: center;
 }
