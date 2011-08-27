@@ -57,9 +57,21 @@ a, div, object {
    height: 87px;
    background: transparent url('../images/header-bg.png') repeat-x scroll top left;
 }
-.site-header img {
+.site-header h1.logo {
    float: left;
    margin-top: 14px;
+   width: 218px;
+   height: 49px;
+}
+h1.logo a {
+   display: block;
+   width: 218px;
+   height: 49px;
+   background: url('../images/ll-logo-header.png');
+   text-decoration: none;
+}
+h1.logo span {
+   visibility: hidden;
 }
 .mainNavTab, .mainNavTabCap {
    background-image: url('../images/buttons.png');
