@@ -33,29 +33,39 @@ ll.SchedulingWidget.prototype.getContentElement = function() {
 
 ll.SchedulingWidget.prototype.createDom = function() {
     ll.SchedulingWidget.superClass_.createDom.call(this);
+    goog.dom.classes.add(this.getElement(), 'll-schedulingwidget');
     this.c_ = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
     this.contentElement_ = this.c_('div');
-    this.scheduleTextDiv_ = this.c_('div');
+    var scheduleContainer = this.c_('div');
     goog.dom.append(
-        this.getElement(), this.contentElement_, this.scheduleTextDiv_);
+        scheduleContainer, this.c_('p', null, "Times I'm availabile:"));
+    this.scheduleTextDiv_ = this.c_('div');
+    goog.dom.append(scheduleContainer, this.scheduleTextDiv_);
+    goog.dom.append(
+        this.getElement(), this.contentElement_, 
+        scheduleContainer);
     this.timeRibbon_ = new ll.TimeRibbon();
     this.addChild(this.timeRibbon_, true);
 };
 
 ll.SchedulingWidget.prototype.enterDocument = function() {
     ll.SchedulingWidget.superClass_.enterDocument.call(this);
-    this.getHandler().listen(
-        this.timeRibbon_,
-        ll.TimeRibbon.RANGES_CHANGED,
-        this.rangesChanged_);
+    this.getHandler().
+        listen(
+            this.timeRibbon_,
+            ll.TimeRibbon.RANGES_CHANGED,
+            this.rangesChanged_);
 };
 
 ll.SchedulingWidget.prototype.rangesChanged_ = function(e) {
     var ranges = this.timeRibbon_.getSelectedRanges();
     goog.dom.removeChildren(this.scheduleTextDiv_);
-    var ul = this.c_('ul');
+    var ul = this.c_('ul', 'll-schedule');
     for (var i = 0; i < ranges.length; i++) {
-        goog.dom.append(ul, this.c_('li', null, this.timeRibbon_.textForRange(ranges[i])));
+        goog.dom.append(ul, this.c_(
+            'li', 
+            (ranges[i].editing ? 'editing' : null), 
+            this.timeRibbon_.textForRange(ranges[i].range)));
     }
     goog.dom.append(this.scheduleTextDiv_, ul);
 };

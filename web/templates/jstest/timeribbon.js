@@ -20,13 +20,14 @@ function assertRanges(ranges) {
     assertEquals(ranges.length, selectedRanges.length);
     for (var i = 0; i < ranges.length; i++) {
         var range = ranges[i];
-        var selectedRange = null;
-        for (var j = 0; j < selectedRanges.length && selectedRange == null; j++) {
-            if (selectedRanges[j].start == range[0] && 
-                selectedRanges[j].end == range[1])
-                selectedRange = selectedRanges[j];
+        var selectedRange = selectedRanges[i];
+        if (selectedRange.range.start != range[0] ||
+            selectedRange.range.end != range[1] ||
+            selectedRange.editing != range[2]) {
+            fail(['Expected range ', i, ' to have values ', range[0], ', ',
+                  range[1], ', and ', range[2], 'but instead has values ',
+                  selectedRange.toString()].join(''));
         }
-        assertNotNull(selectedRange);
     }
     for (var i = 0; i < ll.TimeRibbon.NUM_DAYS * 24; i++) {
         var range = null;
@@ -38,7 +39,7 @@ function assertRanges(ranges) {
         var hasSelectedClass = goog.array.contains(
             goog.dom.classes.get(timeribbon.hourElement(i)),
             'selected');
-        assertEquals(range != null, hasSelectedClass);
+        assertEquals(range != null && !range[2], hasSelectedClass);
     }
 }
 
@@ -78,7 +79,7 @@ function testSelectSectionBasic() {
     mouseOverAndOut(5);
     mouseOver(6);
 
-    assertRanges([[3, 4]]);
+    assertRanges([[3, 4, false], [6, 6, true]]);
 }
 
 function testSelectionSkipping() {
@@ -87,7 +88,7 @@ function testSelectionSkipping() {
     mouseDownAndOut(3);
     mouseOver(5);
 
-    assertRanges([[3, 5]]);
+    assertRanges([[3, 5, false]]);
 }
 
 function testContiguousRanges() {
@@ -98,7 +99,7 @@ function testContiguousRanges() {
     mouseDownAndOut(5);
     mouseOver(6);
 
-    assertRanges([[3, 6]]);
+    assertRanges([[3, 6, false]]);
 }
 
 function testSelectThenGoBack() {
@@ -109,7 +110,7 @@ function testSelectThenGoBack() {
     mouseOverAndOut(5);
     mouseOver(4);
 
-    assertRanges([[3, 4]]);
+    assertRanges([[3, 4, false]]);
 }
 
 function testUnselectSkipping() {

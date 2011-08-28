@@ -1,27 +1,27 @@
-.ll-timeribbon {
+.ll-timeribbon div.hours {
    height: 100px;
    width: 400px;
 }
 
-.ll-timeribbon div.hour {
+.ll-timeribbon span.hour {
+   display: inline-block;
    height: 100px;
    width: 4px;
-   float: left;
 }
 
-.ll-timeribbon div.daydiv {
+.ll-timeribbon span.daydiv {
    border-left: 1px solid gray;
 }
 
-.ll-timeribbon div.endday {
+.ll-timeribbon span.endday {
    border-right: 1px solid gray;
 }
 
-.ll-timeribbon div.dayover {
+.ll-timeribbon span.dayover {
    background-color: #999999;
 }
 
-.ll-timeribbon div.selected {
+.ll-timeribbon span.selected {
    background-color: red;
 }
 
@@ -29,4 +29,14 @@
    display: inline-block;
    width: 97px;
    text-align: center;
+}
+
+.ll-schedulingwidget div.messages {
+   width: 200px;
+   float: left;
+}
+
+
+ul.ll-schedule li.editing {
+   color: #999;
 }
