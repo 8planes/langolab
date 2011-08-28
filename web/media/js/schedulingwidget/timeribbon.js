@@ -22,14 +22,18 @@ goog.require('goog.date.DateTime');
 goog.require('goog.math.Range');
 goog.require('goog.i18n.DateTimeFormat');
 
-ll.TimeRibbon = function() {
+/**
+ * @constructor
+ * @param {goog.date.Date} startDate
+ * @param {Array.<ll.TimeRibbon.PartnerAvailability>=} opt_partnerHours Array of partner availabilities
+ * @param {Array.<goog.math.Range>=} opt_myHours My availabilities.
+ */
+ll.TimeRibbon = function(startDate, opt_partnerHours, opt_myHours) {
     goog.ui.Component.call(this);
-    this.currentDateTime_ = new goog.date.DateTime();
     this.startDateTime_ = new goog.date.DateTime(
-        this.currentDateTime_.getYear(), 
-        this.currentDateTime_.getMonth(),
-        this.currentDateTime_.getDate());
-    this.startIndex_ = this.currentDateTime_.getHours();
+        startDate.getYear(), 
+        startDate.getMonth(),
+        startDate.getDate());
     if (goog.DEBUG) {
         this.logger_ = goog.debug.Logger.getLogger('ll.TimeRibbon');
     }
@@ -39,15 +43,29 @@ ll.TimeRibbon = function() {
      */
     this.mouseDownRange_ = null;
     /**
+     * @type {?ll.TimeRibbon.PartnerAvailability>=}
+     */
+    this.partnerHours_ = opt_partnerHours;
+    /**
      * Kept in sorted order.
      * @type {Array.<goog.math.Range>}
      */
-    this.selectedRanges_ = [];
+    this.selectedRanges_ = opt_myHours || [];
     this.dateTimeFormat_ = new goog.i18n.DateTimeFormat("MMM d, h a");
     this.hourFormat_ = new goog.i18n.DateTimeFormat("h a");
     this.mouseOverIndex_ = null;
 };
 goog.inherits(ll.TimeRibbon, goog.ui.Component);
+
+/**
+ * @enum
+ */
+ll.TimeRibbon.PartnerAvailability = {
+    NONE: 0,
+    LOW: 1,
+    MEDIUM: 2,
+    HIGH: 3
+};
 
 ll.TimeRibbon.NUM_DAYS = 4;
 
@@ -57,10 +75,7 @@ ll.TimeRibbon.rangeComparison_ = function(a, b) {
     return goog.array.defaultCompare(a.start, b.start);
 };
 
-ll.TimeRibbon.prototype.createDom = function() {
-    ll.TimeRibbon.superClass_.createDom.call(this);
-    goog.dom.classes.add(this.getElement(), 'll-timeribbon');
-    var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
+ll.TimeRibbon.prototype.createDaysHeader_ = function($d) {
     var daysDiv = $d('div', 'days');
     var dayFormat = new goog.i18n.DateTimeFormat('EEE, MMM d');
     var dateTime = this.startDateTime_.clone();
@@ -68,11 +83,14 @@ ll.TimeRibbon.prototype.createDom = function() {
         goog.dom.append(daysDiv, $d('span', 'day', dayFormat.format(dateTime)));
         dateTime.add(new goog.date.Interval(0, 0, 1));
     }
+    return daysDiv;
+};
 
+ll.TimeRibbon.prototype.createHoursElements_ = function($d) {
     this.hours_ = [];
     var numHours = ll.TimeRibbon.NUM_DAYS * 24;
     this.hoursDiv_ = $d('div', 'hours');
-    var hourSpan;
+    var hourSpan, partnerHourSpan, myHourSpan, hasPartnerHour;
     for (var i = 0; i < numHours; i++) {
         hourSpan = this.getDomHelper().createDom('span', 'hour');
         if (i % 24 == 0) {
@@ -81,10 +99,37 @@ ll.TimeRibbon.prototype.createDom = function() {
         if (i == numHours - 1) {
             goog.dom.classes.add(hourSpan, 'endday');
         }
+
+        if (this.partnerHours_) {
+            partnerHourSpan = $d('span', 'partnerhour');
+            goog.dom.classes.add(
+                partnerHourSpan, 
+                'partnerhour-' + this.partnerHours_[i]);
+            goog.dom.append(hourSpan, partnerHourSpan);
+        }
+        
+        myHourSpan = $d('span', 'myhour');
+        if (this.partnerHours_) {
+            goog.dom.classes.add(myHourSpan, 'myhour-half');
+        }
+        goog.dom.append(hourSpan, myHourSpan);
+        
         this.hours_.push(hourSpan);
         goog.dom.append(this.hoursDiv_, hourSpan);
     }
-    goog.dom.append(this.getElement(), daysDiv, this.hoursDiv_);
+    this.setSelected_();
+};
+
+ll.TimeRibbon.prototype.createDom = function() {
+    ll.TimeRibbon.superClass_.createDom.call(this);
+    goog.dom.classes.add(this.getElement(), 'll-timeribbon');
+    var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
+
+    var daysHeader = this.createDaysHeader_($d);
+
+    this.createHoursElements_($d);
+
+    goog.dom.append(this.getElement(), daysHeader, this.hoursDiv_);
 };
 
 ll.TimeRibbon.prototype.enterDocument = function() {
@@ -93,10 +138,15 @@ ll.TimeRibbon.prototype.enterDocument = function() {
     for (var i = 0; i < this.hours_.length; i++) {
         this.addHourListener_(handler, i);
     }
-    handler.listen(
-        this.getDomHelper().getDocument(),
-        [goog.events.EventType.MOUSEUP],
-        this.mouseUp_)
+    handler.
+        listen(
+            this.getDomHelper().getDocument(),
+            [goog.events.EventType.MOUSEUP],
+            this.mouseUp_).
+        listen(
+            this.hoursDiv_,
+            goog.events.EventType.MOUSEOUT,
+            goog.bind(this.hoursMouseOut_, this));
 };
 
 ll.TimeRibbon.prototype.addHourListener_ = function(handler, index) {
@@ -112,16 +162,11 @@ ll.TimeRibbon.prototype.addHourListener_ = function(handler, index) {
         listen(
             this.hours_[index],
             goog.events.EventType.MOUSEDOWN,
-            goog.bind(this.hourMouseDown_, this, index)).
-        listen(
-            this.hoursDiv_,
-            goog.events.EventType.MOUSEOUT,
-            goog.bind(this.hoursMouseOut_, this));
+            goog.bind(this.hourMouseDown_, this, index));
 };
 
 ll.TimeRibbon.prototype.hoursMouseOut_ = function(e) {
     if (goog.dom.contains(this.hoursDiv_, e.target) &&
-        e.relatedTarget &&
         !goog.dom.contains(this.hoursDiv_, e.relatedTarget)) {
         this.mouseOverIndex_ = null;
         this.dispatchEvent(ll.TimeRibbon.RANGES_CHANGED);
@@ -129,6 +174,14 @@ ll.TimeRibbon.prototype.hoursMouseOut_ = function(e) {
 };
 
 ll.TimeRibbon.prototype.hourMouseOver_ = function(index, e) {
+    if (goog.dom.contains(this.hours_[index], e.target) &&
+        e.relatedTarget &&
+        !goog.dom.contains(this.hours_[index], e.relatedTarget)) {
+        this.hourMouseOverImpl_(index, e);
+    }
+};
+
+ll.TimeRibbon.prototype.hourMouseOverImpl_ = function(index, e) {
     if (this.mouseDown_) {
         var startIndex, endIndex;
         if (index > this.lastMouseDownIndex_) {
@@ -161,10 +214,11 @@ ll.TimeRibbon.prototype.hourMouseOver_ = function(index, e) {
         this.lastMouseDownIndex_ = index;
     }
     else {
-        goog.dom.classes.add(this.hours_[index], 'dayover');
+        goog.dom.classes.add(this.hours_[index], 'hourover');
         this.mouseOverIndex_ = index;
     }
     this.dispatchEvent(ll.TimeRibbon.RANGES_CHANGED);
+    
 };
 
 ll.TimeRibbon.prototype.coalesceSelectedRanges_ = function() {
@@ -186,7 +240,10 @@ ll.TimeRibbon.prototype.coalesceSelectedRanges_ = function() {
 };
 
 ll.TimeRibbon.prototype.hourMouseOut_ = function(index, e) {
-    goog.dom.classes.remove(this.hours_[index], 'dayover')
+    if (goog.dom.contains(this.hours_[index], e.target) &&
+        !goog.dom.contains(this.hours_[index], e.relatedTarget)) {
+        goog.dom.classes.remove(this.hours_[index], 'hourover')
+    }
 };
 
 ll.TimeRibbon.prototype.hourMouseDown_ = function(index, e) {

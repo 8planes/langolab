@@ -1,0 +1,48 @@
+.ll-schedulingwidget div.myschedule {
+   width: 195px;
+   float: left;
+}
+
+.ll-schedulingwidget div.partneravail {
+   width: 195px;
+   margin-left: 205px;
+}
+
+.ll-schedulingwidget .partneravailsubdiv, .ll-schedulingwidget .myavailsubdiv {
+   margin: 4px 0;
+}
+
+.ll-schedulingwidget .availbox {
+   width: 20px;
+   height: 20px;
+   float: left;
+}
+
+.ll-schedulingwidget .availbox-1 {
+   background: #cfc;
+}
+
+.ll-schedulingwidget .availbox-2 {
+   background: #7f7;
+}
+
+.ll-schedulingwidget .availbox-3 {
+   background: #0f0;
+}
+
+.ll-schedulingwidget .availtext {
+   margin-left: 28px;
+   line-height: 20px;
+}
+
+.ll-schedulingwidget .my-availbox {
+   background: #66f;
+}
+
+.ll-schedulingwidget .myavailsubdiv-editing div.my-availbox {
+   background: #fff;
+}
+
+.ll-schedulingwidget .myavailsubdiv-editing .availtext {
+   color: #999;
+}

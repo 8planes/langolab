@@ -6,7 +6,7 @@
 .ll-timeribbon span.hour {
    display: block;
    float: left;
-   height: 99px;
+   height: 100px;
    width: 4px;
 }
 
@@ -18,12 +18,40 @@
    border-right: 1px solid gray;
 }
 
-.ll-timeribbon span.dayover {
+.ll-timeribbon span.hourover span.myhour {
    background-color: #999999;
 }
 
-.ll-timeribbon span.selected {
-   background-color: red;
+.ll-timeribbon span.selected span.myhour {
+   background-color: #66f;
+}
+
+.ll-timeribbon span.partnerhour {
+   display: block;
+   width: 4px;
+   height: 50px;
+}
+
+.ll-timeribbon span.partnerhour-1 {
+   background: #cfc;
+}
+
+.ll-timeribbon span.partnerhour-2 {
+   background: #7f7;
+}
+
+.ll-timeribbon span.partnerhour-3 {
+   background: #0f0;
+}
+
+.ll-timeribbon span.myhour {
+   display: block;
+   width: 4px;
+   height: 100px;
+}
+
+.ll-timeribbon span.myhour-half {
+   height: 50px;
 }
 
 .ll-timeribbon span.day {
@@ -32,12 +60,3 @@
    text-align: center;
 }
 
-.ll-schedulingwidget div.messages {
-   width: 200px;
-   float: left;
-}
-
-
-ul.ll-schedule li.editing {
-   color: #999;
-}

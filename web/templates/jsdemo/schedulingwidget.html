@@ -1,16 +1,28 @@
 {% extends "jsdemo/base.html" %}
 {% block css %}
 <link rel="stylesheet" media="screen" type="text/css" href="{{MEDIA_URL}}css/timeribbon.css"/>
+<link rel="stylesheet" media="screen" type="text/css" href="{{MEDIA_URL}}css/schedulingwidget.css"/>
 {% endblock %}
 {% block requires %}
   goog.require('ll.SchedulingWidget');
 {% endblock %}
 {% block content %}
-<div id="div"></div>
+<div id="div" style="width: 410px; float: left"></div>
+<div id="secondDiv" style="margin-left: 420px; width: 410px"></div>
 <script type="text/javascript">
-  var widget = new ll.SchedulingWidget();
+  var date = new goog.date.Date();
+  var widget = new ll.SchedulingWidget(date);
   var component = new goog.ui.Component();
   component.decorate(goog.dom.getElement('div'));
+  component.addChild(widget, true);
+
+  var partnerAvailabilities = [];
+  for (var hour = 0; hour < ll.TimeRibbon.NUM_DAYS * 24; hour++) {
+      partnerAvailabilities.push(hour % 4);
+  }
+  widget = new ll.SchedulingWidget(date, partnerAvailabilities);
+  component = new goog.ui.Component();
+  component.decorate(goog.dom.getElement('secondDiv'));
   component.addChild(widget, true);
 </script>
 {% endblock %}
