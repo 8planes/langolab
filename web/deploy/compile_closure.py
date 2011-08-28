@@ -25,7 +25,6 @@ import logging
 
 BASE = os.path.dirname(__file__)
 sys.path.insert(0, os.path.join(BASE, ".."))
-from scriptlists import JS
 
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s %(levelname)s %(message)s')
@@ -33,13 +32,13 @@ logging.basicConfig(level=logging.INFO,
 JS_LIB = os.path.join(BASE, "../media/js")
 CLOSURE_DIR = os.path.join(JS_LIB, 'closure')
 
-def compile(js_list, compiled_name):
+def compile(js_file, compiled_name):
     logging.info('starting compilation of {0}'.format(compiled_name))
     command = [os.path.join(CLOSURE_DIR, 'bin/calcdeps.py')]
-    for f in js_list:
-        command.extend(['-i', os.path.join(JS_LIB, f)])
+    command.extend(['-i', os.path.join(JS_LIB, js_file)])
     command.extend(
         ['-p', CLOSURE_DIR,
+         '-p', JS_LIB,
          '-o', 'compiled',
          '-c', 'compiler.jar',
          '-f', '--define=goog.DEBUG=false',
@@ -54,4 +53,4 @@ def compile(js_list, compiled_name):
     with open(os.path.join(JS_LIB, compiled_name), "w") as f:
         f.write(output)
 
-compile(JS, 'llexchange-compiled.js')
+compile("conversations/manager.js", 'llexchange-compiled.js')

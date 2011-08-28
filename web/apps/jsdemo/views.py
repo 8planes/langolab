@@ -16,12 +16,10 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-import scriptlists
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 
 def jsdemo(request, file_name):
     return render_to_response(
         'jsdemo/{0}.html'.format(file_name),
-        { "scripts": scriptlists.JS },
-        context_instance=RequestContext(request))
+         context_instance=RequestContext(request))

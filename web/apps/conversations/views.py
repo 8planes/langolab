@@ -32,7 +32,6 @@ from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime, timedelta
 import stomp
 from django.utils import simplejson as json
-import scriptlists
 from conversations import rpc as rpc_module
 from django.db.models import Sum
 from django.conf.global_settings import LANGUAGES
@@ -101,8 +100,7 @@ def conversations(request):
         "conversations/conversations.html",
         { "languages_json": languages_json,
           "flash_vars": flash_vars,
-          'js_debug': settings.JS_DEBUG,
-          'scripts': scriptlists.JS },
+          'js_debug': settings.JS_DEBUG },
         context_instance=RequestContext(request));
 
 @csrf_exempt

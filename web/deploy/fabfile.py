@@ -55,6 +55,11 @@ def update_web():
         env.warn_only = False
         run('touch deploy/{0}.wsgi'.format(env.user))
 
+def write_closure_deps():
+    with cd('{0}/llexchange/web'.format(env.base_dir)):
+        run('git pull')
+        run('./writeclosuredeps.sh')
+
 def update():
     update_web()
     update_swf()
