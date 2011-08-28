@@ -19,6 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 goog.provide('ll.SchedulingWidget');
 
 goog.require('ll.TimeRibbon');
+goog.require('ll.HorizontalScroller');
 
 /**
  * @constructor
@@ -86,7 +87,8 @@ ll.SchedulingWidget.prototype.createDom = function() {
 
     this.timeRibbon_ = new ll.TimeRibbon(
         this.startDate_, this.partnerHours_, this.myHours_);
-    this.addChild(this.timeRibbon_, true);
+    this.scroller_ = new ll.HorizontalScroller(this.timeRibbon_);
+    this.addChild(this.scroller_, true);
 
     this.rangesChanged_();
 };

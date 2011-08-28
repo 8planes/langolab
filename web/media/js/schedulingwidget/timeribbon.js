@@ -18,9 +18,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 goog.provide('ll.TimeRibbon');
 
+goog.require('goog.ui.Component');
 goog.require('goog.date.DateTime');
 goog.require('goog.math.Range');
 goog.require('goog.i18n.DateTimeFormat');
+goog.require('goog.dom.classes');
+goog.require('goog.dom');
 
 /**
  * @constructor
@@ -67,7 +70,7 @@ ll.TimeRibbon.PartnerAvailability = {
     HIGH: 3
 };
 
-ll.TimeRibbon.NUM_DAYS = 4;
+ll.TimeRibbon.NUM_DAYS = 7;
 
 ll.TimeRibbon.RANGES_CHANGED = 'rangeschanged';
 
@@ -241,6 +244,7 @@ ll.TimeRibbon.prototype.coalesceSelectedRanges_ = function() {
 
 ll.TimeRibbon.prototype.hourMouseOut_ = function(index, e) {
     if (goog.dom.contains(this.hours_[index], e.target) &&
+        e.relatedTarget &&
         !goog.dom.contains(this.hours_[index], e.relatedTarget)) {
         goog.dom.classes.remove(this.hours_[index], 'hourover')
     }
