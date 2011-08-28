@@ -4,8 +4,9 @@
 }
 
 .ll-timeribbon span.hour {
-   display: inline-block;
-   height: 100px;
+   display: block;
+   float: left;
+   height: 99px;
    width: 4px;
 }
 
