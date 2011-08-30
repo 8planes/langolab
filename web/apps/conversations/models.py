@@ -61,7 +61,7 @@ class WaitingUserLanguagePair(models.Model):
     last_ping = models.DateTimeField(auto_now_add=True)
 
 class WaitingConversation(models.Model):
-    waiting_user = models.ForeignKey(WaitingUser, null=False)    
+    waiting_user = models.ForeignKey(WaitingUser)    
     native_language = models.CharField(
         max_length=16, choices=SORTED_LANGUAGES, db_index=True)
     foreign_language = models.CharField(

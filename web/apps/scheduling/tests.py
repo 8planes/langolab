@@ -32,12 +32,24 @@ class RequestMockup(object):
         self.POST = post
         self.session = {}
 
-    def is_authenticated(self):
-        return True
+TIME_RANGE = 7 * 24
 
-    def is_anonymous(self):
-        return False
+def _schedule_arg_for_times(start_end_pairs):
+    return \
+        [{ 'start': [2011, 8, p[0], p[1]],
+           'end': [2011, 8, p[2], p[3]] } 
+         for p in start_end_pairs]
 
+def _index_for_hour(start_day, day, hour):
+    return (day - start_day) * 24 + hour
+
+def _indexes_for_times(start_end_pairs, start_day):
+    hours = [0] * TIME_RANGE
+    for pair in start_end_pairs:
+        start_index = _index_for_hour(start_day, pair[0], pair[1])
+        end_index = _index_for_hour(start_day, pair[2], pair[3]) + 1
+        hours[start_index:end_index] = [1] * (end_index - start_index)
+    return hours
 
 class SchedulingTest(TestCase):
 
@@ -48,17 +60,50 @@ class SchedulingTest(TestCase):
         self.user_0 = CustomUser.objects.get(username='test')
         # speaks es, learning en
         self.user_1 = CustomUser.objects.get(username='jose')
+        # speaks it, learning en and es
+        self.user_2 = CustomUser.objects.get(username='ricardo')
 
     def test_save_my_schedule_basic(self):
-        start_time = time.mktime(datetime(2011, 8, 11, 17).timetuple())
-        end_time = time.mktime(datetime(2011, 8, 11, 17).timetuple())
-        schedule_obj = [
-            { 'start': start_time,
-              'end': end_time }]
-        jsonText = json.dumps(schedule_obj)
-        request = RequestMockup(
-            self.user_0, 
-            post={'schedule': jsonText})
+        schedule_arg = _schedule_arg_for_times([[11, 17, 11, 17]])
+        request = RequestMockup(self.user_0)
         # test passes if this doesn't throw exception
-        rpc.save_schedule(request, schedule_obj)
+        rpc.save_schedule(request, schedule_arg, 2011, 8, 11, TIME_RANGE)
 
+    def test_retrieve_schedule(self):
+        schedule_arg = _schedule_arg_for_times([[11, 17, 11, 17]])
+        request = RequestMockup(self.user_0)
+        rpc.save_schedule(request, schedule_arg, 2011, 8, 11, TIME_RANGE)
+        resulting_schedule = rpc.fetch_schedule(
+            request, ['es'], ['en'], 2011, 8, 11, TIME_RANGE)
+        for hour in range(0, 7 * 24):
+            self.assertEqual(
+                1 if hour == 17 else 0,
+                resulting_schedule[hour])
+
+    def test_double_up_schedule(self):
+        # TODO: save schedule twice, on top of each other
+        pass
+
+    def test_disjoint_schedule(self):
+        # TODO: save schedule twice, but disjoint
+        pass
+
+    def test_save_schedule_two_users(self):
+        user_1_times = [[11, 17, 11, 20], [12, 17, 12, 20]]
+        schedule_arg = _schedule_arg_for_times(user_1_times)
+        request = RequestMockup(self.user_1)
+        rpc.save_schedule(request, schedule_arg, 2011, 8, 11, TIME_RANGE)
+
+        user_2_times = [[11, 19, 11, 20], [12, 13, 12, 19]]
+        schedule_arg = _schedule_arg_for_times(user_2_times)
+        request = RequestMockup(self.user_2)
+        rpc.save_schedule(request, schedule_arg, 2011, 8, 11, TIME_RANGE)
+
+        resulting_schedule = rpc.fetch_schedule(
+            request, ['en'], ['es', 'it'], 2011, 8, 11, TIME_RANGE)
+        user_1_indexes = _indexes_for_times(user_1_times, 11)
+        user_2_indexes = _indexes_for_times(user_2_times, 11)
+        indexes = [x[0] + x[1] for x in zip(user_1_indexes, user_2_indexes)]
+        self.assertEqual(len(indexes), len(resulting_schedule))
+        for i in range(0, len(indexes)):
+            self.assertEqual(indexes[i], resulting_schedule[i])

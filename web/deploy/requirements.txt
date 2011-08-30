@@ -12,3 +12,5 @@ stomper==0.2.4
 South==0.7.3
 vendor/python-openid-2.2.5.tar.gz
 vendor/stomp.py-3.0.2a.tar.gz
+vendor/celery-2.2.7.zip
+vendor/django-celery-2.2.4.tar.gz
