@@ -17,6 +17,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
 import os
+import djcelery
+djcelery.setup_loader()
 
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
 
@@ -153,6 +155,7 @@ INSTALLED_APPS = (
     'scheduling',
     'south',
     'openid_consumer',
+    'djcelery',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -168,6 +171,7 @@ STOMP_PORT = 61613
 CIRRUS_URL = 'rtmfp://p2p.rtmfp.net/7bbaaf24e9c7e6ba4c405591-3c650c743f5a/'
 
 CELERY_ALWAYS_EAGER = True
+BROKER_BACKEND = 'memory'
 
 try:
     from settings_local import *

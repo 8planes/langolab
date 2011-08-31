@@ -73,9 +73,10 @@ class SchedulingTest(TestCase):
         schedule_arg = _schedule_arg_for_times([[11, 17, 11, 17]])
         request = RequestMockup(self.user_0)
         rpc.save_schedule(request, schedule_arg, 2011, 8, 11, TIME_RANGE)
+
         resulting_schedule = rpc.fetch_schedule(
             request, ['es'], ['en'], 2011, 8, 11, TIME_RANGE)
-        for hour in range(0, 7 * 24):
+        for hour in range(0, TIME_RANGE):
             self.assertEqual(
                 1 if hour == 17 else 0,
                 resulting_schedule[hour])

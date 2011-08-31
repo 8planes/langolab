@@ -7,6 +7,7 @@ sys.path.append('/home/llexchange/llexchange/web/apps')
 
 import os
 os.environ['DJANGO_SETTINGS_MODULE'] = 'langolab_settings'
+os.environ["CELERY_LOADER"] = "django"
 
 import django.core.handlers.wsgi
 application = django.core.handlers.wsgi.WSGIHandler()
