@@ -23,7 +23,7 @@ def save_schedule(request, utc_schedule, utc_year, utc_month, utc_day, num_hours
 
 def fetch_schedule(request, native_languages, foreign_languages, utc_year, utc_month, utc_day, num_hours):
     start_date = datetime(utc_year, utc_month, utc_day)
-    end_date = start_date + timedelta(hours=num_hours)
+    end_date = start_date + timedelta(hours=num_hours - 1)
     start_hour = models.LanguagePairUserCount.hour_for_date(start_date)
     end_hour = models.LanguagePairUserCount.hour_for_date(end_date)
     hour_dicts = []
