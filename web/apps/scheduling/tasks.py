@@ -22,8 +22,20 @@ from scheduling import models
 from llauth.models import CustomUser as User
 from celery.signals import task_failure
 from django.conf import settings
+from celery.decorators import periodic_task
+from user_notifier import notify_user
 import logging
 import traceback as traceback_
+
+# makes unit testing easier, since we can alter value returned by now.
+now = datetime.now
+
+# number of potential partners a user needs to warrant a notification
+# hopefully we'll be able to increase this in the future.
+NOTIFICATION_PARTNER_THRESHOLD = 5
+
+# min number of hours in between notifications to a particular user.
+MIN_NOTIFICATION_PERIOD = 48
 
 def process_failure_signal(exception, traceback, sender, task_id,  
                            signal, args, kwargs, einfo, **kw):  
@@ -39,13 +51,84 @@ def update_schedules(user_id, utc_start_date, num_hours):
     end_hour = models.LanguagePairUserCount.hour_for_date(end_date)
     user = User.objects.get(id=user_id)
     native_languages = [user.native_language];
-    foreign_languages = [p.language for p in user.preferreduserlanguage_set.all()]
+    foreign_languages = [p.language for p in 
+                         user.preferreduserlanguage_set.all()]
     # the flip is intentional here.
     for foreign_language in native_languages:
         for native_language in foreign_languages:
-            _update_lp_schedule(start_hour, end_hour, native_language, foreign_language)
-    
-def _update_lp_schedule(start_hour, end_hour, native_language, foreign_language):
+            _update_lp_schedule(start_hour, end_hour, 
+                                native_language, foreign_language)
+
+@periodic_task(run_every=timedelta(hours=3))
+def notify_users():
+    users = User.objects.filter(
+        userschedulerange__end_time__gte=now()).distinct()
+    for user in users:
+        _maybe_notify_user(user)
+
+def _maybe_notify_user(user):
+    if models.UserNotificationOptOut.objects.filter(user=user).exists():
+        return
+    last_notification = user.usernotification_set.order_by('-date_sent')[:1]
+    if last_notification:
+        td = now() - last_notification
+        total_seconds = td.seconds + td.days * 24 * 3600
+        if total_seconds / 3600 <= MIN_NOTIFICATION_PERIOD:
+            return
+    now_datetime = now()
+    start_datetime = datetime(now_datetime.year, 
+                              now_datetime.month,
+                              now_datetime.day,
+                              now_datetime.hour)
+    user_counts = LanguagePairUserCount.user_counts(
+        [user.native_language],
+        [p.language for p in user.preferreduserlanguage_set.all()],
+        start_datetime,
+        start_datetime + timedelta(days=5))
+    ranges_past_threshold = _ranges_past_threshold(start_datetime, user_counts)
+    if len(ranges_past_threshold) > 0:
+        if last_notifiction is None or \
+                _contains_new_ranges(ranges_past_threshold, last_notification):
+            notify_user(user, ranges_past_threshold)
+
+def _contains_new_ranges(ranges, last_notification):
+    earliest_date = ranges[0][0]
+    previous_ranges = \
+        [[r.start_time, r.end_time] for r in 
+         last_notification.usernotificationranges_set.filter(
+            end_time__gte=earliest_date).all()]
+    for range in ranges:
+        if not _range_is_contained(range, previous_ranges):
+            return True
+    return False
+
+def _range_is_contained(range, range_arr):
+    for r in range_arr:
+        if r[0] <= range[0] and r[1] >= range[1]:
+            return True
+    return False
+
+def _ranges_past_threshold(start_datetime, user_counts):
+    cur_range = None
+    ranges = []
+    cur_hour = 0
+    date = None
+    for user_count in user_counts:
+        date = start_datetime + timedelta(hours=cur_hour)
+        if user_count >= NOTIFICATION_PARTNER_THRESHOLD and cur_range is None:
+            cur_range = [date, date]
+        elif user_count >= NOTIFICATION_PARTNER_THRESHOLD:
+            cur_range[1] = date
+        elif user_count < NOTIFICATION_PARTNER_THRESHOLD and cur_range is not None:
+            ranges.append(cur_range)
+            cur_range = None
+        cur_hour += 1
+    if cur_range is not None:
+        ranges.append(cur_range)
+    return ranges
+
+def _update_lp_schedule(start_hour, end_hour, 
+                        native_language, foreign_language):
     start_date = models.LanguagePairUserCount.date_for_hour(start_hour)
     end_date = models.LanguagePairUserCount.date_for_hour(end_hour)
     models.LanguagePairUserCount.objects.filter(

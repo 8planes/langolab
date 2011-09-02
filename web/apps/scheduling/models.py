@@ -67,11 +67,40 @@ class LanguagePairUserCount(models.Model):
     def date_for_hour(cls, hour):
         return BASE_DATE + timedelta(hours=hour)
 
+    @classmethod
+    def user_counts(cls, native_languages, foreign_languages, start_date, end_date):
+        """ Returns an array of user_counts per hour. First index 
+        corresponds to start_date, and last to end_date """
+        start_hour = LanguagePairUserCount.hour_for_date(start_date)
+        end_hour = LanguagePairUserCount.hour_for_date(end_date)
+        hour_dicts = []
+        for native_language in native_languages:
+            for foreign_language in foreign_languages:
+                schedules_qs = LanguagePairUserCount.objects.filter(
+                    hour__gte=start_hour,
+                    hour__lte=end_hour,
+                    native_language=native_language,
+                    foreign_language=foreign_language).all()
+                hour_dicts.append(
+                    dict([(str(s.hour), s.user_count) for s in schedules_qs]))
+        user_counts = [0] * (end_hour - start_hour + 1)
+        for hour in range(start_hour, end_hour + 1):
+            str_hour = str(hour)
+            for hour_dict in hour_dicts:
+                if str_hour in hour_dict:
+                    user_counts[hour - start_hour] += hour_dict[str_hour]
+        return user_counts
+
+
 class UserNotification(models.Model):
     user = models.ForeignKey(User)
-    date_sent = models.DateTimeField()
+    date_sent = models.DateTimeField(db_index=True)
     code = models.CharField(max_length=32)
     date_clicked = models.DateTimeField(null=True)
+
+class UserNotificationOptOut(models.Model):
+    user = models.ForeignKey(User)
+    opt_out_date = models.DateTimeField(auto_now_add=True)
 
 class UserNotificationRanges(models.Model):
     notification = models.ForeignKey(UserNotification)
