@@ -21,6 +21,9 @@ from llauth.models import CustomUser
 from scheduling import rpc
 from datetime import datetime
 from django.utils import simplejson as json
+from scheduling import tasks
+from scheduling.tasks import NOTIFICATION_PARTNER_THRESHOLD
+import test_utils
 import time
 
 
@@ -50,6 +53,46 @@ def _indexes_for_times(start_end_pairs, start_day):
         end_index = _index_for_hour(start_day, pair[2], pair[3]) + 1
         hours[start_index:end_index] = [1] * (end_index - start_index)
     return hours
+
+class NotificationTest(TestCase):
+
+    fixtures = ['test.json']
+
+    def _notify_user(self, user, ranges):
+        self._user_notification_records.append(
+            { "user": user,
+              "ranges": ranges })
+
+    def _now(self):
+        return datetime(2011, 8, 11)
+
+    def setUp(self):
+        # speaks es, learning en
+        self.user_1 = CustomUser.objects.get(username='jose')
+        self._user_notification_records = []
+        tasks.notify_user = self._notify_user
+        tasks.now = self._now
+
+    def test_notification(self):
+        def save_schedule(user, start_hour, end_hour):
+            request = RequestMockup(user)
+            rpc.save_schedule(
+                request,
+                _schedule_arg_for_times([[11, start_hour, 11, end_hour]]),
+                2011, 8, 11, TIME_RANGE)
+
+        save_schedule(self.user_1, 17, 18)
+
+        for i in range(0, NOTIFICATION_PARTNER_THRESHOLD * 2):
+            offset = (i % 2) * 2
+            user = test_utils.create_user(
+                'user_{0}'.format(i), ['en'], ['es'])
+            save_schedule(user, 17 - offset, 18 - offset)
+            tasks.notify_users()
+            self.assertEqual(
+                0 if i < NOTIFICATION_PARTNER_THRESHOLD * 2 - 2 else 1,
+                len(self._user_notification_records))
+
 
 class SchedulingTest(TestCase):
 

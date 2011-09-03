@@ -102,10 +102,9 @@ class UserNotificationOptOut(models.Model):
     user = models.ForeignKey(User)
     opt_out_date = models.DateTimeField(auto_now_add=True)
 
-class UserNotificationRanges(models.Model):
+class UserNotificationRange(models.Model):
     notification = models.ForeignKey(UserNotification)
     # UTC
     start_time = models.DateTimeField()
     # UTC
     end_time = models.DateTimeField()
-    num_users = models.IntegerField()

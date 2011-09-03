@@ -24,6 +24,7 @@ from celery.signals import task_failure
 from django.conf import settings
 from celery.decorators import periodic_task
 from user_notifier import notify_user
+import string, random
 import logging
 import traceback as traceback_
 
@@ -36,6 +37,8 @@ NOTIFICATION_PARTNER_THRESHOLD = 5
 
 # min number of hours in between notifications to a particular user.
 MIN_NOTIFICATION_PERIOD = 48
+
+_ALPHANUM = string.letters + string.digits
 
 def process_failure_signal(exception, traceback, sender, task_id,  
                            signal, args, kwargs, einfo, **kw):  
@@ -70,8 +73,8 @@ def _maybe_notify_user(user):
     if models.UserNotificationOptOut.objects.filter(user=user).exists():
         return
     last_notification = user.usernotification_set.order_by('-date_sent')[:1]
-    if last_notification:
-        td = now() - last_notification
+    if len(last_notification) > 0:
+        td = now() - last_notification[0].date_sent
         total_seconds = td.seconds + td.days * 24 * 3600
         if total_seconds / 3600 <= MIN_NOTIFICATION_PERIOD:
             return
@@ -80,16 +83,29 @@ def _maybe_notify_user(user):
                               now_datetime.month,
                               now_datetime.day,
                               now_datetime.hour)
-    user_counts = LanguagePairUserCount.user_counts(
+    user_counts = models.LanguagePairUserCount.user_counts(
         [user.native_language],
         [p.language for p in user.preferreduserlanguage_set.all()],
         start_datetime,
         start_datetime + timedelta(days=5))
     ranges_past_threshold = _ranges_past_threshold(start_datetime, user_counts)
     if len(ranges_past_threshold) > 0:
-        if last_notifiction is None or \
-                _contains_new_ranges(ranges_past_threshold, last_notification):
-            notify_user(user, ranges_past_threshold)
+        if len(last_notification) == 0 or \
+                _contains_new_ranges(ranges_past_threshold, last_notification[0]):
+            _notify_user(user, ranges_past_threshold)
+
+def _notify_user(user, ranges_past_threshold):
+    user_notification = models.UserNotification(
+        user=user,
+        date_sent=now(),
+        code=''.join([_ALPHANUM[random.randint(0, len(_ALPHANUM)-1)] 
+                      for i in xrange(12)]))
+    user_notification.save()
+    for range in ranges_past_threshold:
+        models.UserNotificationRange(notification=user_notification,
+                                     start_time=range[0],
+                                     end_time=range[1]).save()
+    notify_user(user, ranges_past_threshold)
 
 def _contains_new_ranges(ranges, last_notification):
     earliest_date = ranges[0][0]

@@ -20,7 +20,7 @@ from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.conf import settings
-from llauth.models import PreferredUserLanguage
+from llauth.models import PreferredUserLanguage, CustomUser as User
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from llauth.decorators import profile_required
