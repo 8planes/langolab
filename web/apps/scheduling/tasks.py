@@ -105,7 +105,7 @@ def _notify_user(user, ranges_past_threshold):
         models.UserNotificationRange(notification=user_notification,
                                      start_time=range[0],
                                      end_time=range[1]).save()
-    notify_user(user, ranges_past_threshold)
+    notify_user(user_notification)
 
 def _contains_new_ranges(ranges, last_notification):
     earliest_date = ranges[0][0]

@@ -58,10 +58,8 @@ class NotificationTest(TestCase):
 
     fixtures = ['test.json']
 
-    def _notify_user(self, user, ranges):
-        self._user_notification_records.append(
-            { "user": user,
-              "ranges": ranges })
+    def _notify_user(self, user_notification):
+        self._user_notification_records.append(user_notification)
 
     def _now(self):
         return datetime(2011, 8, 11)
@@ -73,25 +71,27 @@ class NotificationTest(TestCase):
         tasks.notify_user = self._notify_user
         tasks.now = self._now
 
-    def test_notification(self):
-        def save_schedule(user, start_hour, end_hour):
-            request = RequestMockup(user)
-            rpc.save_schedule(
-                request,
-                _schedule_arg_for_times([[11, start_hour, 11, end_hour]]),
-                2011, 8, 11, TIME_RANGE)
+    def _save_schedule(user, start_hour, end_hour):
+        request = RequestMockup(user)
+        rpc.save_schedule(
+            request,
+            _schedule_arg_for_times([[11, start_hour, 11, end_hour]]),
+            2011, 8, 11, TIME_RANGE)
 
-        save_schedule(self.user_1, 17, 18)
+    def test_notification(self):
+        self._save_schedule(self.user_1, 17, 18)
 
         for i in range(0, NOTIFICATION_PARTNER_THRESHOLD * 2):
             offset = (i % 2) * 2
             user = test_utils.create_user(
                 'user_{0}'.format(i), ['en'], ['es'])
-            save_schedule(user, 17 - offset, 18 - offset)
+            self._save_schedule(user, 17 - offset, 18 - offset)
             tasks.notify_users()
             self.assertEqual(
                 0 if i < NOTIFICATION_PARTNER_THRESHOLD * 2 - 2 else 1,
                 len(self._user_notification_records))
+        user_notification = self._user_notifications_records[0]
+        self.assertEqual(1, len(user_notification.usernotifcationrange_set.all()))
 
 
 class SchedulingTest(TestCase):

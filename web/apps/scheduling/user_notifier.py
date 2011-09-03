@@ -1,2 +1,2 @@
-def notify_user(user, ranges_past_threshold):
+def notify_user(user_notification):
     pass
