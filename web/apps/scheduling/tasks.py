@@ -111,7 +111,7 @@ def _contains_new_ranges(ranges, last_notification):
     earliest_date = ranges[0][0]
     previous_ranges = \
         [[r.start_time, r.end_time] for r in 
-         last_notification.usernotificationranges_set.filter(
+         last_notification.usernotificationrange_set.filter(
             end_time__gte=earliest_date).all()]
     for range in ranges:
         if not _range_is_contained(range, previous_ranges):

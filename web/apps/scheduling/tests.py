@@ -22,7 +22,8 @@ from scheduling import rpc
 from datetime import datetime
 from django.utils import simplejson as json
 from scheduling import tasks
-from scheduling.tasks import NOTIFICATION_PARTNER_THRESHOLD
+from scheduling.tasks import NOTIFICATION_PARTNER_THRESHOLD, MIN_NOTIFICATION_PERIOD
+import math
 import test_utils
 import time
 
@@ -71,17 +72,17 @@ class NotificationTest(TestCase):
         tasks.notify_user = self._notify_user
         tasks.now = self._now
 
-    def _save_schedule(user, start_hour, end_hour):
+    def _save_schedule(self, user, start_hour, end_hour, day=11):
         request = RequestMockup(user)
         rpc.save_schedule(
             request,
-            _schedule_arg_for_times([[11, start_hour, 11, end_hour]]),
-            2011, 8, 11, TIME_RANGE)
+            _schedule_arg_for_times([[day, start_hour, day, end_hour]]),
+            2011, 8, day, TIME_RANGE)
 
     def test_notification(self):
         self._save_schedule(self.user_1, 17, 18)
 
-        for i in range(0, NOTIFICATION_PARTNER_THRESHOLD * 2):
+        for i in range(NOTIFICATION_PARTNER_THRESHOLD * 2):
             offset = (i % 2) * 2
             user = test_utils.create_user(
                 'user_{0}'.format(i), ['en'], ['es'])
@@ -90,9 +91,41 @@ class NotificationTest(TestCase):
             self.assertEqual(
                 0 if i < NOTIFICATION_PARTNER_THRESHOLD * 2 - 2 else 1,
                 len(self._user_notification_records))
-        user_notification = self._user_notifications_records[0]
-        self.assertEqual(1, len(user_notification.usernotifcationrange_set.all()))
+        user_notification = self._user_notification_records[0]
+        self.assertEqual(
+            1, len(user_notification.usernotificationrange_set.all()))
 
+    def test_notification_second_range_added(self):
+        # first we save schedules for 8/11. Notifications are sent.
+        self._save_schedule(self.user_1, 17, 18)
+
+        for i in range(NOTIFICATION_PARTNER_THRESHOLD):
+            user = test_utils.create_user(
+                'a_user_{0}'.format(i), ['en'], ['es'])
+            self._save_schedule(user, 16, 19)
+
+        tasks.notify_users()
+        self.assertEqual(1, len(self._user_notification_records))
+
+        # now save schedules for days in future, after notification period.
+        period_days = int(math.ceil(MIN_NOTIFICATION_PERIOD / 24.0))
+        self._save_schedule(self.user_1, 17, 18, 11 + period_days)
+
+        for i in range(NOTIFICATION_PARTNER_THRESHOLD):
+            user = test_utils.create_user(
+                'a_user_{0}'.format(i), ['en'], ['es'])
+            self._save_schedule(user, 16, 19, 11 + period_days)
+
+        # try to notify next day (should be before min notification period).
+        # no new notifications should be sent
+        tasks.now = lambda: datetime(2011, 8, 12)
+        tasks.notify_users()
+        self.assertEqual(1, len(self._user_notification_records))
+
+        # now notify after min period. should get a new notification.
+        tasks.now = lambda: datetime(2011, 8, 11 + period_days, 2)
+        tasks.notify_users()
+        self.assertEqual(2, len(self._user_notification_records))
 
 class SchedulingTest(TestCase):
 
