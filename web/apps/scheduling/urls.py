@@ -16,36 +16,12 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-# production settings
+from django.conf.urls.defaults import *
 
-from settings import *
-from langolab_secret_settings import *
-
-DEBUG = False
-TEMPLATE_DEBUG = DEBUG
-
-JS_DEBUG = False
-
-DATABASES = {
-    'default' : {
-        'ENGINE' : 'django.db.backends.mysql',
-        'NAME' : 'llexchange',
-        'USER' : DB_USER,
-        'PASSWORD' : DB_PASSWORD,
-        'HOST' : '',
-        'PORT' : ''
-        }
-    }
-
-SITE_ID = 2
-SITE_NAME = 'langolab'
-
-STOMP_SERVER = 'www.langolab.com'
-
-TWITTER_CONSUMER_KEY = 'c9dFh0Gua9qwWTDmEZIXQ'
-
-FACEBOOK_APP_ID = '170317592993518'
-
-MEDIA_URL = 'http://www.langolab.com/site_media/'
-
-AWS_ACCESS_KEY = 'AKIAJDPMOLSYHWGM4NYQ'
+urlpatterns = patterns(
+    'scheduling.views',
+    url(r'^ical/(?P<user_id>\d+)', 'ical', name='ical'),
+    url(r'^googlecal/(?P<user_id>\d+)', 'googlecal', name='googlecal'),
+    url(r'^yahoocal/(?P<user_id>\d+)', 'yahoocal', name='yahoocal'),
+    url(r'^email_test/', 'email_test')
+)

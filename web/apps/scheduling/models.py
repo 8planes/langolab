@@ -91,16 +91,15 @@ class LanguagePairUserCount(models.Model):
                     user_counts[hour - start_hour] += hour_dict[str_hour]
         return user_counts
 
+class UserNotificationOptOut(models.Model):
+    user = models.ForeignKey(User)
+    opt_out_date = models.DateTimeField(auto_now_add=True)
 
 class UserNotification(models.Model):
     user = models.ForeignKey(User)
     date_sent = models.DateTimeField(db_index=True)
     code = models.CharField(max_length=32)
     date_clicked = models.DateTimeField(null=True)
-
-class UserNotificationOptOut(models.Model):
-    user = models.ForeignKey(User)
-    opt_out_date = models.DateTimeField(auto_now_add=True)
 
 class UserNotificationRange(models.Model):
     notification = models.ForeignKey(UserNotification)

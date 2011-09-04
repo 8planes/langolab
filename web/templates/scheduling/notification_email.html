@@ -1,0 +1,27 @@
+<div></div>
+<p>
+  Great news! Some {{foreign_languages_text}} speakers learning {{native_languages_text}} at Langolab are planning
+  on being online at the same time as you. Here are the times ranges
+  we have where at least 5 {{foreign_languages_text}} speakers telling 
+  us they'll be online at the same time:
+</p>
+<ul>
+  {% for time in times %}
+    {% if time.2 %}
+       <li>{{ time.0|date:"M j: g a"}} to {{time.1|date:"g a"}}</li>
+    {% else %}
+       <li>{{ time.0|date:"M j, g a"}} to {{time.1|date:"M j, g a"}}</li>
+    {% endif %}
+  {% endfor %}
+</ul>
+<h2>Add these times to your calendar now!</h2>
+<ul>
+  <li><a href="http://{{current_site.domain}}{% url scheduling:ical user_id %}">
+      <span style="display: inline-block; width: 21px; background: transparent url({{MEDIA_URL}}/images/calendar_icons.png) -15px 0 no-repeat">&nbsp;</span>&nbsp;Outlook calendar</a></li>
+  <li><a target="schedule_cal" href="http://{{current_site.domain}}{% url scheduling:googlecal user_id %}">
+      <span style="display: inline-block; width: 16px; margin-left: 5px; background: transparent url({{MEDIA_URL}}/images/calendar_icons.png) -52px 0 no-repeat">&nbsp;</span>&nbsp;Google calendar</a></li>
+  <li><a target="schedule_cal" href="http://{{current_site.domain}}{% url scheduling:yahoocal user_id %}">
+      <span style="display: inline-block; width: 16px; margin-left: 5px; background: transparent url({{MEDIA_URL}}/images/calendar_icons.png) -36px 4px no-repeat">&nbsp;</span>&nbsp;Yahoo! calendar</a></li>
+  <li><a href="http://{{current_site.domain}}{% url scheduling:ical user_id %}">
+      <span style="display: inline-block; width: 16px; margin-left: 5px; background: transparent url({{MEDIA_URL}}/images/calendar_icons.png) 0 0 no-repeat">&nbsp;</span>&nbsp;iCal calendar</a></li>
+</ul>

@@ -30,6 +30,7 @@ urlpatterns = patterns(
         {'template':'contact.html'}, name="contact"),
     (r'^for_teachers/', include('marketing.urls', namespace="marketing")),
     (r'^llauth/', include('llauth.urls', namespace='llauth')),
+    (r'^scheduling/', include('scheduling.urls', namespace='scheduling')),
     (r'^admin/', include(admin.site.urls)),
     (r'^jsdemo/(\w+)', 'jsdemo.views.jsdemo'),
     (r'^jstest/(\w+)', 'jstest.views.jstest'),
