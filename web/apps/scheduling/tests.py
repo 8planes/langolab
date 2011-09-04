@@ -113,7 +113,7 @@ class NotificationTest(TestCase):
 
         for i in range(NOTIFICATION_PARTNER_THRESHOLD):
             user = test_utils.create_user(
-                'a_user_{0}'.format(i), ['en'], ['es'])
+                'b_user_{0}'.format(i), ['en'], ['es'])
             self._save_schedule(user, 16, 19, 11 + period_days)
 
         # try to notify next day (should be before min notification period).
@@ -126,6 +126,31 @@ class NotificationTest(TestCase):
         tasks.now = lambda: datetime(2011, 8, 11 + period_days, 2)
         tasks.notify_users()
         self.assertEqual(2, len(self._user_notification_records))
+
+    def test_notification_multiple_ranges(self):
+        request = RequestMockup(self.user_1)
+        rpc.save_schedule(
+            request,
+            _schedule_arg_for_times([[11, 17, 11, 18], 
+                                     [12, 17, 12, 18], 
+                                     [13, 17, 13, 18]]),
+            2011, 8, 11, TIME_RANGE)
+        for i in range(NOTIFICATION_PARTNER_THRESHOLD):
+            user = test_utils.create_user(
+                'a_user_{0}'.format(i), ['en'], ['es'])
+            request = RequestMockup(user)
+            times = [[11, 17, 11, 17], [12, 17, 12, 18]]
+            if i < NOTIFICATION_PARTNER_THRESHOLD / 2:
+                times.append([13, 17, 13, 18])
+            rpc.save_schedule(request, _schedule_arg_for_times(times),
+                              2011, 8, 11, TIME_RANGE)
+
+        tasks.notify_users()
+        self.assertEquals(1, len(self._user_notification_records))
+        notification_record = self._user_notification_records[0]
+        # user_1 should be notified for 2 ranges, not 1 or 3.
+        self.assertEqual(
+            2, len(notification_record.usernotificationrange_set.all()))
 
 class SchedulingTest(TestCase):
 
