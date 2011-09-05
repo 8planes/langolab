@@ -21,6 +21,7 @@ from llauth.models import CustomUser
 from scheduling import rpc
 from datetime import datetime
 from django.utils import simplejson as json
+import scheduling
 from scheduling import tasks
 from scheduling.tasks import NOTIFICATION_PARTNER_THRESHOLD, MIN_NOTIFICATION_PERIOD
 import math
@@ -46,14 +47,6 @@ def _schedule_arg_for_times(start_end_pairs):
 
 def _index_for_hour(start_day, day, hour):
     return (day - start_day) * 24 + hour
-
-def _indexes_for_times(start_end_pairs, start_day):
-    hours = [0] * TIME_RANGE
-    for pair in start_end_pairs:
-        start_index = _index_for_hour(start_day, pair[0], pair[1])
-        end_index = _index_for_hour(start_day, pair[2], pair[3]) + 1
-        hours[start_index:end_index] = [1] * (end_index - start_index)
-    return hours
 
 class NotificationTest(TestCase):
 
@@ -163,6 +156,7 @@ class SchedulingTest(TestCase):
         self.user_1 = CustomUser.objects.get(username='jose')
         # speaks it, learning en and es
         self.user_2 = CustomUser.objects.get(username='ricardo')
+        scheduling.utcnow = lambda: datetime(2011, 8, 11)
 
     def test_save_my_schedule_basic(self):
         schedule_arg = _schedule_arg_for_times([[11, 17, 11, 17]])
@@ -177,11 +171,12 @@ class SchedulingTest(TestCase):
 
         resulting_schedule = rpc.fetch_schedule(
             request, ['es'], ['en'], 2011, 8, 11, TIME_RANGE)
-        print(resulting_schedule)
-        for hour in range(0, TIME_RANGE):
-            self.assertEqual(
-                1 if hour == 17 else 0,
-                resulting_schedule[hour])
+        self.assertEqual(1, len(resulting_schedule))
+        self.assertEqual(
+            scheduling.hour_for_date(datetime(2011, 8, 11, 17)),
+            resulting_schedule[0]['hour'])
+        self.assertEqual(
+            1, resulting_schedule[0]['count'])
 
     def test_double_up_schedule(self):
         # TODO: save schedule twice, on top of each other
@@ -202,11 +197,23 @@ class SchedulingTest(TestCase):
         request = RequestMockup(self.user_2)
         rpc.save_schedule(request, schedule_arg, 2011, 8, 11, TIME_RANGE)
 
-        resulting_schedule = rpc.fetch_schedule(
+        counts = rpc.fetch_schedule(
             request, ['en'], ['es', 'it'], 2011, 8, 11, TIME_RANGE)
-        user_1_indexes = _indexes_for_times(user_1_times, 11)
-        user_2_indexes = _indexes_for_times(user_2_times, 11)
-        indexes = [x[0] + x[1] for x in zip(user_1_indexes, user_2_indexes)]
-        self.assertEqual(len(indexes), len(resulting_schedule))
-        for i in range(0, len(indexes)):
-            self.assertEqual(indexes[i], resulting_schedule[i])
+        self.assertEqual(12, len(counts))
+        # first check counts on 8/11
+        cur_index = 0
+        start_hour = scheduling.hour_for_date(datetime(2011, 8, 11, 17))
+        for hour in range(17, 21):
+            self.assertEqual(start_hour + cur_index, 
+                             counts[cur_index]['hour'])
+            self.assertEqual(1 if hour < 19 else 2,
+                             counts[cur_index]['count'])
+            cur_index += 1
+        # now check counts on 8/12
+        for hour in range(13, 21):
+            self.assertEqual(scheduling.hour_for_date(
+                    datetime(2011, 8, 12, hour)),
+                             counts[cur_index]['hour'])
+            self.assertEqual(2 if hour >= 17 and hour <= 19 else 1,
+                             counts[cur_index]['count'])
+            cur_index += 1

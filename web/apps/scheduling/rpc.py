@@ -43,5 +43,6 @@ def save_schedule(request, utc_schedule, utc_year, utc_month, utc_day, num_hours
 def fetch_schedule(request, native_languages, foreign_languages, utc_year, utc_month, utc_day, num_hours):
     start_date = datetime(utc_year, utc_month, utc_day)
     end_date = start_date + timedelta(hours=num_hours - 1)
-    return scheduling.user_counts(
-        native_languages, foreign_languages, start_date, end_date)
+    return [{'hour': c.hour, 'count': c.user_count} for c in
+            scheduling.user_counts(
+            native_languages, foreign_languages, start_date, end_date)]

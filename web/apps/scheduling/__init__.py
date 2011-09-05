@@ -60,7 +60,9 @@ def calendar_for_languages(native_languages, foreign_languages):
     foreign_string = ','.join(sorted(foreign_languages))
     calendar = None
     try:
-        calendar = models.LanguageCalendar.objects.get()
+        calendar = models.LanguageCalendar.objects.get(
+            native_languages=native_string,
+            foreign_languages=foreign_string)
     except models.LanguageCalendar.DoesNotExist:
         calendar = models.LanguageCalendar(
             native_languages=native_string,
@@ -174,4 +176,4 @@ def _fill_user_counts(calendar, start_datetime, end_datetime):
                 hour=cur_hour,
                 calendar=calendar,
                 user_count=user_count).save()
-            cur_hour += 1
+        cur_hour += 1
