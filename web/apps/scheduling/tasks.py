@@ -64,7 +64,7 @@ def update_schedules(user_id, utc_start_date, num_hours):
         reduce(operator.or_, foreign_language_queries)).filter(
         reduce(operator.or_, native_language_queries)).distinct()
     for calendar in calendars:
-        update_language_calendar(calendar)
+        scheduling.update_language_calendar(calendar)
 
 @periodic_task(run_every=timedelta(hours=3))
 def notify_users():
@@ -87,12 +87,11 @@ def _maybe_notify_user(user):
                               now_datetime.month,
                               now_datetime.day,
                               now_datetime.hour)
-    user_counts = models.LanguagePairUserCount.user_counts(
+    calendar = scheduling.calendar_for_languages(
         [user.native_language],
-        [p.language for p in user.preferreduserlanguage_set.all()],
-        start_datetime,
-        start_datetime + timedelta(days=5))
-    ranges_past_threshold = _ranges_past_threshold(start_datetime, user_counts)
+        [p.language for p in user.preferreduserlanguage_set.all()])
+    ranges_past_threshold = calendar.languagecalendarrange_set.filter(
+        end_date__gte=start_datetime).order_by('start_date')
     if len(ranges_past_threshold) > 0:
         if len(last_notification) == 0 or \
                 _contains_new_ranges(ranges_past_threshold, last_notification[0]):
@@ -106,12 +105,12 @@ def _notify_user(user, ranges_past_threshold):
     user_notification.save()
     for range in ranges_past_threshold:
         models.UserNotificationRange(notification=user_notification,
-                                     start_time=range[0],
-                                     end_time=range[1]).save()
+                                     start_time=range.start_date,
+                                     end_time=range.end_date).save()
     notify_user(user_notification)
 
 def _contains_new_ranges(ranges, last_notification):
-    earliest_date = ranges[0][0]
+    earliest_date = ranges[0].start_date
     previous_ranges = \
         [[r.start_time, r.end_time] for r in 
          last_notification.usernotificationrange_set.filter(
@@ -121,27 +120,9 @@ def _contains_new_ranges(ranges, last_notification):
             return True
     return False
 
-def _range_is_contained(range, range_arr):
+def _range_is_contained(language_calendar_range, range_arr):
     for r in range_arr:
-        if r[0] <= range[0] and r[1] >= range[1]:
+        if r[0] <= language_calendar_range.start_date and \
+                r[1] >= language_calendar_range.end_date:
             return True
     return False
-
-def _ranges_past_threshold(start_datetime, user_counts):
-    cur_range = None
-    ranges = []
-    cur_hour = 0
-    date = None
-    for user_count in user_counts:
-        date = start_datetime + timedelta(hours=cur_hour)
-        if user_count >= NOTIFICATION_PARTNER_THRESHOLD and cur_range is None:
-            cur_range = [date, date]
-        elif user_count >= NOTIFICATION_PARTNER_THRESHOLD:
-            cur_range[1] = date
-        elif user_count < NOTIFICATION_PARTNER_THRESHOLD and cur_range is not None:
-            ranges.append(cur_range)
-            cur_range = None
-        cur_hour += 1
-    if cur_range is not None:
-        ranges.append(cur_range)
-    return ranges

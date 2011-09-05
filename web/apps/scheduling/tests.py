@@ -55,7 +55,7 @@ class NotificationTest(TestCase):
     def _notify_user(self, user_notification):
         self._user_notification_records.append(user_notification)
 
-    def _now(self):
+    def _utcnow(self):
         return datetime(2011, 8, 11)
 
     def setUp(self):
@@ -63,7 +63,8 @@ class NotificationTest(TestCase):
         self.user_1 = CustomUser.objects.get(username='jose')
         self._user_notification_records = []
         tasks.notify_user = self._notify_user
-        tasks.now = self._now
+        scheduling.utcnow = self._utcnow
+        tasks.utcnow = self._utcnow
 
     def _save_schedule(self, user, start_hour, end_hour, day=11):
         request = RequestMockup(user)
@@ -111,12 +112,12 @@ class NotificationTest(TestCase):
 
         # try to notify next day (should be before min notification period).
         # no new notifications should be sent
-        tasks.now = lambda: datetime(2011, 8, 12)
+        tasks.utcnow = lambda: datetime(2011, 8, 12)
         tasks.notify_users()
         self.assertEqual(1, len(self._user_notification_records))
 
         # now notify after min period. should get a new notification.
-        tasks.now = lambda: datetime(2011, 8, 11 + period_days, 2)
+        tasks.utcnow = lambda: datetime(2011, 8, 11 + period_days, 2)
         tasks.notify_users()
         self.assertEqual(2, len(self._user_notification_records))
 
