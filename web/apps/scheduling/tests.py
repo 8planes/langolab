@@ -177,6 +177,7 @@ class SchedulingTest(TestCase):
 
         resulting_schedule = rpc.fetch_schedule(
             request, ['es'], ['en'], 2011, 8, 11, TIME_RANGE)
+        print(resulting_schedule)
         for hour in range(0, TIME_RANGE):
             self.assertEqual(
                 1 if hour == 17 else 0,

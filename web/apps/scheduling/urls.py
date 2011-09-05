@@ -20,8 +20,9 @@ from django.conf.urls.defaults import *
 
 urlpatterns = patterns(
     'scheduling.views',
-    url(r'^ical/(?P<user_id>\d+)', 'ical', name='ical'),
+    url(r'^ical_download/(?P<user_id>\d+)', 'ical_download', name='ical_download'),
     url(r'^googlecal/(?P<user_id>\d+)', 'googlecal', name='googlecal'),
     url(r'^yahoocal/(?P<user_id>\d+)', 'yahoocal', name='yahoocal'),
-    url(r'^email_test/', 'email_test')
+    url(r'^email_test/', 'email_test'),
+    url(r'^ical/(?P<user_id>\d+)', 'ical', name='ical')
 )

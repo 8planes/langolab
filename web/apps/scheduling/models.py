@@ -21,11 +21,10 @@ from django.db import models
 from llauth.models import CustomUser as User
 from django.conf.global_settings import LANGUAGES
 from datetime import datetime, timedelta
+import scheduling
 
 SORTED_LANGUAGES = list(LANGUAGES)
 SORTED_LANGUAGES.sort(key=lambda item: item[1])
-
-BASE_DATE = datetime(2011, 1, 1)
 
 class UserScheduleRange(models.Model):
     user = models.ForeignKey(User)
@@ -37,59 +36,11 @@ class UserScheduleRange(models.Model):
 
     @property
     def start_hour(self):
-        return LanguagePairUserCount.hour_for_date(
-            self.start_time)
+        return scheduling.hour_for_date(self.start_time)
 
     @property
     def end_hour(self):
-        return LanguagePairUserCount.hour_for_date(
-            self.end_time)
-
-class LanguagePairUserCount(models.Model):
-    class Meta:
-        unique_together = ('hour', 'native_language', 'foreign_language')
-
-    # hour since midnight, January 1, 2011 UTC
-    hour = models.IntegerField(db_index=True)
-    native_language = models.CharField(
-        max_length=16, choices=SORTED_LANGUAGES, db_index=True)
-    foreign_language = models.CharField(
-        max_length=16, choices=SORTED_LANGUAGES, db_index=True)
-    user_count = models.IntegerField()
-
-    @classmethod
-    def hour_for_date(cls, utc_date):
-        td = utc_date - BASE_DATE
-        total_seconds = td.seconds + td.days * 24 * 3600
-        return total_seconds / 3600
-
-    @classmethod
-    def date_for_hour(cls, hour):
-        return BASE_DATE + timedelta(hours=hour)
-
-    @classmethod
-    def user_counts(cls, native_languages, foreign_languages, start_date, end_date):
-        """ Returns an array of user_counts per hour. First index 
-        corresponds to start_date, and last to end_date """
-        start_hour = LanguagePairUserCount.hour_for_date(start_date)
-        end_hour = LanguagePairUserCount.hour_for_date(end_date)
-        hour_dicts = []
-        for native_language in native_languages:
-            for foreign_language in foreign_languages:
-                schedules_qs = LanguagePairUserCount.objects.filter(
-                    hour__gte=start_hour,
-                    hour__lte=end_hour,
-                    native_language=native_language,
-                    foreign_language=foreign_language).all()
-                hour_dicts.append(
-                    dict([(str(s.hour), s.user_count) for s in schedules_qs]))
-        user_counts = [0] * (end_hour - start_hour + 1)
-        for hour in range(start_hour, end_hour + 1):
-            str_hour = str(hour)
-            for hour_dict in hour_dicts:
-                if str_hour in hour_dict:
-                    user_counts[hour - start_hour] += hour_dict[str_hour]
-        return user_counts
+        return scheduling.hour_for_date(self.end_time)
 
 class UserNotificationOptOut(models.Model):
     user = models.ForeignKey(User)
@@ -107,3 +58,43 @@ class UserNotificationRange(models.Model):
     start_time = models.DateTimeField()
     # UTC
     end_time = models.DateTimeField()
+
+class LanguageCalendar(models.Model):
+    class Meta:
+        unique_together = ('native_languages', 'foreign_languages')
+    # native languages in alphabetical order, comma-delimited
+    native_languages = models.CharField(max_length=255, db_index=True)
+    # foreign languages in alphabetical order, comma-delimited
+    foreign_languages = models.CharField(max_length=255, db_index=True)
+    last_update = models.DateTimeField(auto_now_add=True)
+
+class LanguageCalendarNativeLanguage(models.Model):
+    class Meta:
+        unique_together = ('calendar', 'native_language')
+    calendar = models.ForeignKey(LanguageCalendar)
+    native_language = models.CharField(
+        max_length=16, choices=SORTED_LANGUAGES, db_index=True)
+
+class LanguageCalendarForeignLanguage(models.Model):
+    class Meta:
+        unique_together = ('calendar', 'foreign_language')
+    calendar = models.ForeignKey(LanguageCalendar)
+    foreign_language = models.CharField(
+        max_length=16, choices=SORTED_LANGUAGES, db_index=True)
+
+class LanguageCalendarRange(models.Model):
+    class Meta:
+        unique_together = ('calendar', 'start_date')
+    calendar = models.ForeignKey(LanguageCalendar)
+    uid = models.CharField(max_length=64)
+    start_date = models.DateTimeField(db_index=True)
+    end_date = models.DateTimeField(db_index=True)
+
+class LanguageCalendarUserCount(models.Model):
+    class Meta:
+        unique_together = ('hour', 'calendar')
+
+    # hour since midnight, January 1, 2011 UTC
+    hour = models.IntegerField(db_index=True)
+    calendar = models.ForeignKey(LanguageCalendar)
+    user_count = models.IntegerField()

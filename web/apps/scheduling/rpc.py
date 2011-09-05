@@ -16,6 +16,7 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+import scheduling
 from scheduling import models, tasks
 from datetime import date, datetime, timedelta
 
@@ -42,5 +43,5 @@ def save_schedule(request, utc_schedule, utc_year, utc_month, utc_day, num_hours
 def fetch_schedule(request, native_languages, foreign_languages, utc_year, utc_month, utc_day, num_hours):
     start_date = datetime(utc_year, utc_month, utc_day)
     end_date = start_date + timedelta(hours=num_hours - 1)
-    return models.LanguagePairUserCount.user_counts(
+    return scheduling.user_counts(
         native_languages, foreign_languages, start_date, end_date)

@@ -23,14 +23,17 @@ from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
 from datetime import datetime
 
-def ical(request, user_id):
-    return HttpResponse('ical')
+def ical_download(request, user_id):
+    return HttpResponse('ical download')
 
 def googlecal(request, user_id):
     return HttpResponse('googlecal')
 
 def yahoocal(request, user_id):
     return HttpResponse('yahoocal')
+
+def ical(request, user_id):
+    return HttpResponse('ical')
 
 def email_test(request):
     dates = [[datetime(2011, 8, 11, 14), datetime(2011, 8, 11, 16), True],

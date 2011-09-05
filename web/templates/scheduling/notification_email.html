@@ -16,12 +16,12 @@
 </ul>
 <h2>Add these times to your calendar now!</h2>
 <ul>
-  <li><a href="http://{{current_site.domain}}{% url scheduling:ical user_id %}">
+  <li><a href="http://{{current_site.domain}}{% url scheduling:ical_download user_id %}">
       <span style="display: inline-block; width: 21px; background: transparent url({{MEDIA_URL}}/images/calendar_icons.png) -15px 0 no-repeat">&nbsp;</span>&nbsp;Outlook calendar</a></li>
   <li><a target="schedule_cal" href="http://{{current_site.domain}}{% url scheduling:googlecal user_id %}">
       <span style="display: inline-block; width: 16px; margin-left: 5px; background: transparent url({{MEDIA_URL}}/images/calendar_icons.png) -52px 0 no-repeat">&nbsp;</span>&nbsp;Google calendar</a></li>
   <li><a target="schedule_cal" href="http://{{current_site.domain}}{% url scheduling:yahoocal user_id %}">
       <span style="display: inline-block; width: 16px; margin-left: 5px; background: transparent url({{MEDIA_URL}}/images/calendar_icons.png) -36px 4px no-repeat">&nbsp;</span>&nbsp;Yahoo! calendar</a></li>
-  <li><a href="http://{{current_site.domain}}{% url scheduling:ical user_id %}">
+  <li><a href="http://{{current_site.domain}}{% url scheduling:ical_download user_id %}">
       <span style="display: inline-block; width: 16px; margin-left: 5px; background: transparent url({{MEDIA_URL}}/images/calendar_icons.png) 0 0 no-repeat">&nbsp;</span>&nbsp;iCal calendar</a></li>
 </ul>
