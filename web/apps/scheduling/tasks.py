@@ -51,15 +51,12 @@ def update_schedules(user_id, utc_start_date, num_hours):
     start_hour = scheduling.hour_for_date(utc_start_date)
     end_hour = scheduling.hour_for_date(end_date)
     user = User.objects.get(id=user_id)
-    native_languages = [user.native_language];
-    foreign_languages = [p.language for p in 
-                         user.preferreduserlanguage_set.all()]
     foreign_language_queries = \
         [Q(languagecalendarforeignlanguage__foreign_language=nl)
-         for nl in native_languages]
+         for nl in user.native_languages()]
     native_language_queries = \
         [Q(languagecalendarnativelanguage__native_language=fl)
-         for fl in foreign_languages]
+         for fl in user.foreign_languages()]
     calendars = models.LanguageCalendar.objects.filter(
         reduce(operator.or_, foreign_language_queries)).filter(
         reduce(operator.or_, native_language_queries)).distinct()
@@ -88,8 +85,7 @@ def _maybe_notify_user(user):
                               now_datetime.day,
                               now_datetime.hour)
     calendar = scheduling.calendar_for_languages(
-        [user.native_language],
-        [p.language for p in user.preferreduserlanguage_set.all()])
+        user.native_languages(), user.foreign_languages())
     ranges_past_threshold = calendar.languagecalendarrange_set.filter(
         end_date__gte=start_datetime).order_by('start_date')
     if len(ranges_past_threshold) > 0:

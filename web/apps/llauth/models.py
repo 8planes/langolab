@@ -51,6 +51,13 @@ class CustomUser(BaseUser):
     def stomp_destination(self):
         return '/user/{0}'.format(self.id)
 
+    def native_languages(self):
+        return [self.native_language]
+
+    def foreign_languages(self):
+        return [p.language for p in 
+                self.preferreduserlanguage_set.all()]
+
 def create_custom_user(sender, instance, created, **kwargs):
     if created:
         values = {}

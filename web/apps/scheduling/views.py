@@ -16,24 +16,44 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from django.http import HttpResponse, Http404, HttpResponseRedirect
+from django.http import HttpResponse, Http404, HttpResponseRedirect, QueryDict
+from django.contrib.sites.models import Site
 from llauth.models import CustomUser as User
 from django.template.loader import render_to_string
-from django.shortcuts import render_to_response, redirect
+from django.shortcuts import render_to_response, redirect, get_object_or_404
 from django.template import RequestContext
 from datetime import datetime
+import scheduling
+from scheduling import models
+from django.conf.global_settings import LANGUAGES
+from django.core.urlresolvers import reverse
+
+utcnow = datetime.utcnow
 
 def ical_download(request, user_id):
-    return HttpResponse('ical download')
+    user = get_object_or_404(User, pk=user_id)
+    ical_text = scheduling.icalendar(
+        user.native_languages(), user.foreign_languages())
+    response = HttpResponse(ical_text, mimetype="text/calendar")
+    response["Content-Disposition"] = "attachment; filename=langolab.ics"
+    return response;
 
 def googlecal(request, user_id):
-    return HttpResponse('googlecal')
+    query_dict = QueryDict()
+    query_dict['cid'] = "http://{0}{1}".format(
+        Site.objects.get_current().domain,
+        reverse('scheduling:ical', args=[user_id]))
+    return redirect("http://www.google.com/calendar/render?{0}".format(
+            query_dict.urlencode()))
 
 def yahoocal(request, user_id):
     return HttpResponse('yahoocal')
 
 def ical(request, user_id):
-    return HttpResponse('ical')
+    user = get_object_or_404(User, pk=user_id)
+    ical_text = scheduling.icalendar(
+        user.native_languages(), user.foreign_languages())
+    return HttpResponse(ical_text, mimetype="text/calendar")
 
 def email_test(request):
     dates = [[datetime(2011, 8, 11, 14), datetime(2011, 8, 11, 16), True],

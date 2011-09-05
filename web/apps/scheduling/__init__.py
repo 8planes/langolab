@@ -21,6 +21,7 @@ from django.conf.global_settings import LANGUAGES
 from django.db.models import Q
 from scheduling import models
 from llauth.models import CustomUser as User
+from icalendar import Calendar, Event, UTC
 import string, random
 import operator
 
@@ -35,6 +36,7 @@ NOTIFICATION_PARTNER_THRESHOLD = 5
 BASE_DATE = datetime(2011, 1, 1)
 SORTED_LANGUAGES = list(LANGUAGES)
 SORTED_LANGUAGES.sort(key=lambda item: item[1])
+LANGUAGE_DICT = dict(LANGUAGES)
 
 _ALPHANUM = string.letters + string.digits
 
@@ -87,6 +89,37 @@ def update_language_calendar(calendar):
 def random_string():
     return ''.join([_ALPHANUM[random.randint(0, len(_ALPHANUM)-1)] 
                     for i in xrange(12)])
+
+def icalendar(native_languages, foreign_languages):
+    calendar = calendar_for_languages(
+        native_languages, foreign_languages)
+    def full_names(langs):
+        str = ", ".join([LANGUAGE_DICT(l) for l in langs[:-1]])
+        if len(langs) > 1:
+            str = " or ".join(str, langs[-1])
+        return str
+    cal = Calendar()
+    calendar_description = \
+        ("Dates where we have at least {0} speakers of "
+         "{1} learning {2} scheduled to be online at langolab.com.").format(
+        NOTIFICATION_PARTNER_THRESHOLD,
+        full_names(foreign_languages), 
+        full_names(native_languages))
+    cal.add('prodid', '-//Langolab//langolab.com//EN')
+    cal.add("version", "2.0")
+    cal.add("X-WR-CALNAME", "Langolab Language Pairings")
+    cal.add("X-WR-CALDESC", calendar_description)
+    cal_ranges = calendar.languagecalendarrange_set.filter(
+        end_date__gte=utcnow()).order_by('start_date')
+    for cal_range in cal_ranges:
+        event = Event()
+        event.add('summary', 'Partners online at langolab.com')
+        event.add('dtstart', cal_range.start_date)
+        event.add('dtend', cal_range.end_date + timedelta(hours=1))
+        event.add('dtstamp', utcnow())
+        event['uid'] = cal_range.uid
+        cal.add_component(event)
+    return cal.as_string()
 
 def _update_calendar_ranges(calendar, start_datetime, end_datetime):
     start_hour = hour_for_date(start_datetime)
