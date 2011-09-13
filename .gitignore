@@ -1,7 +1,9 @@
 .DS_Store
+.vagrant
 *~
 *.pyc
 *.sqlite3
+venv/
 closure
 settings_local.py
 llexchange.swf
