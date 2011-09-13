@@ -5,11 +5,22 @@ class watir {
     "rubygems": ensure => "latest";
     "libopenssl-ruby": ensure => "latest";
     "firefox": ensure => "latest";
+    "xvfb": ensure => "latest";
   }
 
   package { "watir-webdriver":
-    ensure => "latest",
+    ensure => "0.3.3",
     provider => gem,
     require => [Package[ruby], Package[ruby-dev], Package[rubygems]];
   }
+  
+  package { "headless":
+    ensure => "0.2.2",
+    provider => gem,
+    require => Package[watir-webdriver];
+  }
+  
+  
+  
 }
+
