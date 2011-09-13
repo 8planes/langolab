@@ -4,6 +4,7 @@ class vagrantlucid64 {
   
   group { "puppet": ensure => "present"; } ->
   class { 'aptitude': } ->
+  class { 'watir': } ->
   class { 'python': } ->
   python::venv { "langolabvenv": path => $venv }
 }
