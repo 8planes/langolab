@@ -4,7 +4,12 @@ class vagrantlucid64 {
   
   group { "puppet": ensure => "present"; } ->
   class { 'aptitude': } ->
-  class { 'watir': } ->
+  class { 'java':
+    distribution => "jdk",
+    version => "latest";
+  } ->
+  class { 'activemq': } ->
+  class { 'flashpolicytwistd': } ->
   class { 'python': } ->
   python::venv { "langolabvenv": path => $venv }
 }
