@@ -1,7 +1,0 @@
-README.txt
-demjson.py
-pip-egg-info/demjson.egg-info/PKG-INFO
-pip-egg-info/demjson.egg-info/SOURCES.txt
-pip-egg-info/demjson.egg-info/dependency_links.txt
-pip-egg-info/demjson.egg-info/top_level.txt
-test/test_demjson.py

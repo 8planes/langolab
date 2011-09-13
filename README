@@ -34,11 +34,9 @@ To run the development version:
    # this is the langolab directory you cloned from git, not the parent you created the virtualenv in.
    $ pip install -r requirements.txt
 
-6. Check out google closure into directory of your choice: 
-
-   $ svn checkout http://closure-library.googlecode.com/svn/trunk/ <directory>
-   
-   Then symlink media/js/closure to the closure directory of the checkout 
+6. Check out google closure into directory of your choice: svn checkout 
+   http://closure-library.googlecode.com/svn/trunk/ <directory>. Then 
+   symlink media/js/closure to the closure directory of the checkout 
    location. From the langolab directory in step 1:
 
    $ cd web/media/js
