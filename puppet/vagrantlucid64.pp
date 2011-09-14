@@ -4,10 +4,7 @@ class vagrantlucid64 {
   
   group { "puppet": ensure => "present"; } ->
   class { 'aptitude': } ->
-  class { 'java':
-    distribution => "jdk",
-    version => "latest";
-  } ->
+  class { 'java': } ->
   class { 'activemq': } ->
   class { 'flashpolicytwistd': } ->
   class { 'python': } ->

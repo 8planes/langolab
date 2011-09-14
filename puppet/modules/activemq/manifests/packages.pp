@@ -31,14 +31,14 @@ class activemq::packages (
     home    => '/usr/share/activemq',
     shell   => '/bin/bash',
     uid     => '92',
-    before  => Package['activemq'],
+    before  => Class['activemq::package'],
   }
   file { $home_real:
     ensure => directory,
     owner  => '0',
     group  => '0',
     mode   => '0755',
-    before => Package['activemq'],
+    before => Class['activemq::package'],
   }
 
   class { 'activemq::package':

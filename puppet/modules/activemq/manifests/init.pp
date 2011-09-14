@@ -31,7 +31,7 @@ class activemq(
   $server_config = 'UNSET'
 ) {
 
-$version_real = $version
+  $version_real = $version
   $ensure_real  = $ensure
   $webconsole_real = $webconsole
 

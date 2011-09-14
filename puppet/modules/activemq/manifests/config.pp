@@ -25,7 +25,7 @@ class activemq::config (
     group   => 'activemq',
     mode    => '0644',
     notify  => Service['activemq'],
-    require => Package['activemq'],
+    require => Class['activemq::package'],
   }
 
   # The configuration file itself.
