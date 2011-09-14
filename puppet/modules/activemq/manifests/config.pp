@@ -28,12 +28,17 @@ class activemq::config (
     require => Class['activemq::package'],
   }
 
+  file { "/etc/activemq":
+    ensure => directory;
+  }
+
   # The configuration file itself.
   file { 'activemq.xml':
-    ensure  => file,
+    ensure => file,
     path    => $path_real,
     owner   => '0',
     group   => '0',
+    require => File["/etc/activemq"],
     content => $server_config_real,
   }
 

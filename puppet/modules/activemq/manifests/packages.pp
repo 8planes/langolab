@@ -45,15 +45,13 @@ class activemq::packages (
     notify  => Service['activemq'],
   }
 
-  # JJM Fix the activemq init script always exiting with status 0
-  # FIXME This should be corrected in the upstream packages
   file { '/etc/init.d/activemq':
-    ensure  => file,
-    path    => '/etc/init.d/activemq',
-    content => template("${module_name}/init/activemq"),
+    ensure  => link,
+    target => "/opt/activemq/bin/activemq",
     owner   => '0',
     group   => '0',
     mode    => '0755',
+    require => Class["activemq::package"];
   }
 
 }
