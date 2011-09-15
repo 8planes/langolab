@@ -25,6 +25,8 @@ class flashpolicytwistd($domain = "*") {
 
   service { "flashpolicytwistd":
     require => [Package["flashpolicytwistd"], File["/etc/flashpolicy.xml"]],
-    ensure => "running";
+    ensure => "running",
+    hasstatus => false,
+    pattern => "flashpolicytwistd";
   }
 }
