@@ -4,6 +4,8 @@ Vagrant::Config.run do |config|
   config.vm.box_url = "http://files.vagrantup.com/lucid64.box"
 
   config.vm.forward_port "http", 8080, 8080
+  config.vm.forward_port "stomp", 61613, 61613
+  config.vm.forward_port "flashpolicy", 843, 843
 
   config.vm.share_folder "project", "/opt/langolab", "."
 
