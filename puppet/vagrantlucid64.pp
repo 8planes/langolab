@@ -7,7 +7,6 @@ class vagrantlucid64 {
   class { 'java': } ->
   class { 'activemq': } ->
   class { 'rabbitmq::server': } ->
-  class { 'flashpolicytwistd': } ->
   class { 'python': } ->
   python::venv { "langolabvenv": path => $venv } ->
   python::pip { "langolabreqs":
