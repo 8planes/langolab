@@ -6,11 +6,13 @@ class vagrantlucid64 {
   class { 'aptitude': } ->
   class { 'java': } ->
   class { 'activemq': } ->
+  class { 'rabbitmq::server': } ->
   class { 'flashpolicytwistd': } ->
   class { 'python': } ->
   python::venv { "langolabvenv": path => $venv } ->
   python::pip { "langolabreqs":
     venv => $venv,
+    cwd => "${projectdir}web/deploy/",
     requirementsfile => "${projectdir}web/deploy/requirements.txt";
   }
 }
