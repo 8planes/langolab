@@ -7,13 +7,10 @@ class vagrantlucid64 {
   class { 'java': } ->
   class { 'activemq': } ->
   class { 'rabbitmq::server': } ->
+  class { 'langolab::rabbitmq': } ->
   class { 'python': } ->
   python::venv { "langolabvenv": path => $venv } ->
-  python::pip { "langolabreqs":
-    venv => $venv,
-    cwd => "${projectdir}web/deploy/",
-    requirementsfile => "${projectdir}web/deploy/requirements.txt";
-  }
+  class { 'langolab::pip': venv => $venv, projectdir => $projectdir }
 }
 
 class { 'vagrantlucid64': }

@@ -30,7 +30,7 @@ class rabbitmq::server(
   $service_name = 'rabbitmq-server',
   $service_ensure = 'running',
   $install_stomp = false,
-  $stomp_port = '6163',
+  $stomp_port = '61613',
   $stomp_package = 'rabbitmq-plugin-stomp',
   $config='UNSET',
   $env_config='UNSET'
