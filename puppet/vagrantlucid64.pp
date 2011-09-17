@@ -11,6 +11,7 @@ class vagrantlucid64 {
   class { 'python': } ->
   python::venv { "langolabvenv": path => $venv } ->
   class { 'langolab::pip': venv => $venv, projectdir => $projectdir }
+  class { 'langolab::db': }
 }
 
 class { 'vagrantlucid64': }
