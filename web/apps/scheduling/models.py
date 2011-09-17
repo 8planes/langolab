@@ -63,9 +63,9 @@ class LanguageCalendar(models.Model):
     class Meta:
         unique_together = ('native_languages', 'foreign_languages')
     # native languages in alphabetical order, comma-delimited
-    native_languages = models.CharField(max_length=255, db_index=True)
+    native_languages = models.CharField(max_length=32, db_index=True)
     # foreign languages in alphabetical order, comma-delimited
-    foreign_languages = models.CharField(max_length=255, db_index=True)
+    foreign_languages = models.CharField(max_length=32, db_index=True)
     last_update = models.DateTimeField(auto_now_add=True)
 
 class LanguageCalendarNativeLanguage(models.Model):

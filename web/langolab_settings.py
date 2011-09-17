@@ -29,7 +29,7 @@ JS_DEBUG = False
 DATABASES = {
     'default' : {
         'ENGINE' : 'django.db.backends.mysql',
-        'NAME' : 'llexchange',
+        'NAME' : 'langolab',
         'USER' : DB_USER,
         'PASSWORD' : DB_PASSWORD,
         'HOST' : '',

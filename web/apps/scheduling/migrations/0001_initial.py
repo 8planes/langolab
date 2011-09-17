@@ -48,8 +48,8 @@ class Migration(SchemaMigration):
         # Adding model 'LanguageCalendar'
         db.create_table('scheduling_languagecalendar', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('native_languages', self.gf('django.db.models.fields.CharField')(max_length=255, db_index=True)),
-            ('foreign_languages', self.gf('django.db.models.fields.CharField')(max_length=255, db_index=True)),
+            ('native_languages', self.gf('django.db.models.fields.CharField')(max_length=32, db_index=True)),
+            ('foreign_languages', self.gf('django.db.models.fields.CharField')(max_length=32, db_index=True)),
             ('last_update', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
         ))
         db.send_create_signal('scheduling', ['LanguageCalendar'])
@@ -197,10 +197,10 @@ class Migration(SchemaMigration):
         },
         'scheduling.languagecalendar': {
             'Meta': {'unique_together': "(('native_languages', 'foreign_languages'),)", 'object_name': 'LanguageCalendar'},
-            'foreign_languages': ('django.db.models.fields.CharField', [], {'max_length': '255', 'db_index': 'True'}),
+            'foreign_languages': ('django.db.models.fields.CharField', [], {'max_length': '32', 'db_index': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'last_update': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'native_languages': ('django.db.models.fields.CharField', [], {'max_length': '255', 'db_index': 'True'})
+            'native_languages': ('django.db.models.fields.CharField', [], {'max_length': '32', 'db_index': 'True'})
         },
         'scheduling.languagecalendarforeignlanguage': {
             'Meta': {'unique_together': "(('calendar', 'foreign_language'),)", 'object_name': 'LanguageCalendarForeignLanguage'},

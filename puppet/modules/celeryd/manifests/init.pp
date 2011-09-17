@@ -71,21 +71,18 @@ class celeryd($project_dir, $settings_module, $venv) {
   service { "celeryd":
     require => [File['/etc/init.d/celeryd'], File['/var/log/celery'], File['/var/run/celery'], User['celery']],
     ensure => "running",
-    hasstatus => true,
     hasrestart => true;
   }
 
   service { "celerybeat":
     require => [Service['celeryd']],
     ensure => "running",
-    hasstatus => true,
     hasrestart => true;    
   }
 
   service { "celeryevcam":
     require => [File['/etc/init.d/celeryevcam'], User['celery']],
     ensure => "running",
-    hasstatus => true,
     hasrestart => true;
   }
 }
