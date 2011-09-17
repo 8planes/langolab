@@ -1,0 +1,5 @@
+CELERYD_CHDIR="<%= project_dir %>"
+export DJANGO_SETTINGS_MODULE="<%= settings_module %>"
+CELERYD="<%= venv %>/bin/python <%= project_dir %>manage.py celeryd"
+CELERYD_USER="celery"
+CELERYD_GROUP="celery"
