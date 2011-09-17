@@ -10,44 +10,73 @@ class celeryd($project_dir, $settings_module, $venv) {
     gid => "celery",
     require => Group['celery'];
   }
+
+  file { '/var/log/celery':
+    ensure => directory,
+    owner => 'celery',
+    group => 'celery',
+    mode => '0755';
+  }
+
+  file { '/var/run/celery':
+    ensure => directory,
+    owner => 'celery',
+    group => 'celery',
+    mode => '0755';
+  }
   
   file { '/etc/default/celeryd':
-    ensure => "present",
-    source => template("${module_name}/celeryd.erb");
+    ensure => file,
+    owner   => '0',
+    group   => '0',
+    mode    => '0644',
+    content => template("${module_name}/celeryd.erb");
   }
 
   file { '/etc/default/celerybeat':
-    ensure => "present",
-    source => template("${module_name}/celerybeat.erb");
+    ensure => file,
+    owner   => '0',
+    group   => '0',
+    mode    => '0644',
+    content => template("${module_name}/celerybeat.erb");
   }
 
   file { '/etc/init.d/celeryd':
     require => File['/etc/default/celeryd'],
     ensure => present,
+    owner   => '0',
+    group   => '0',
+    mode    => '0755',
     source => 'puppet:///modules/celeryd/celeryd';
   }
 
   file { '/etc/init.d/celerybeat':
     require => File['/etc/default/celerybeat'],
     ensure => present,
+    owner   => '0',
+    group   => '0',
+    mode    => '0755',
     source => 'puppet:///modules/celeryd/celerybeat';
   }
 
   file { '/etc/init.d/celeryevcam':
-    require => File['/etc/default/celeryevcam'],
+    require => File['/etc/default/celeryd'],
     ensure => present,
+    owner   => '0',
+    group   => '0',
+    mode    => '0755',
     source => 'puppet:///modules/celeryd/celeryd';
   }
 
   service { "celeryd":
-    require => [File['/etc/init.d/celeryd'], User['celery']],
+    require => [File['/etc/init.d/celeryd'], File['/var/log/celery'], File['/var/run/celery'], User['celery']],
     ensure => "running",
     hasstatus => true,
     hasrestart => true;
   }
 
   service { "celerybeat":
-    require => [File['/etc/init.d/celerybeat'], User['celery']],
+    require => [Service['celeryd']],
     ensure => "running",
     hasstatus => true,
     hasrestart => true;    

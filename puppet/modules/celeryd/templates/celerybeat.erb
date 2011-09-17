@@ -1,5 +1,7 @@
 CELERYBEAT_CHDIR="<%= project_dir %>"
 export DJANGO_SETTINGS_MODULE="<%= settings_module %>"
 CELERYBEAT="<%= venv %>/bin/python <%= project_dir %>manage.py celerybeat"
+CELERYBEAT_LOG_FILE="/var/log/celery/celerybeat.log"
+CELERYBEAT_PID_FILE="/var/run/celery/celerybeat.pid"
 CELERYBEAT_USER="celery"
 CELERYBEAT_GROUP="celery"

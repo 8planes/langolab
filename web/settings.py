@@ -170,8 +170,11 @@ STOMP_SERVER = 'll.example.com'
 STOMP_PORT = 61613
 CIRRUS_URL = 'rtmfp://p2p.rtmfp.net/7bbaaf24e9c7e6ba4c405591-3c650c743f5a/'
 
-CELERY_ALWAYS_EAGER = True
-BROKER_BACKEND = 'memory'
+BROKER_HOST = "localhost"
+BROKER_PORT = 5672
+BROKER_USER = "llrmquser"
+BROKER_PASSWORD = "llrmqpassword"
+BROKER_VHOST = "llhost"
 
 try:
     from settings_local import *
