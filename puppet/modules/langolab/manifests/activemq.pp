@@ -5,6 +5,7 @@ class langolab::activemq($stomp_debug = false) {
   class { "activemq::config":
     require => Class["activemq::packages"],
     notify  => Class['activemq::service'],
+    path => "/opt/activemq/conf/activemq.xml",
     server_config => template("${module_name}/activemq.xml.erb");
   }
   file { "/var/log/activemq":
