@@ -5,12 +5,11 @@ class vagrantlucid64 {
   group { "puppet": ensure => "present"; } ->
   class { 'aptitude': } ->
   class { 'java': } ->
-  class { 'activemq': } ->
+  class { 'langolab::activemq': stomp_debug => true } ->
   class { 'rabbitmq::server': } ->
   class { 'langolab::rabbitmq': } ->
   class { 'python': } ->
   python::venv { "langolabvenv": path => $venv } ->
-  class { 'langolab::closure': project_dir => "${projectdir}web/" } ->
   class { 'langolab::pip': venv => $venv, projectdir => $projectdir } 
   class { 'langolab::db': } ->
   class { 'celeryd':

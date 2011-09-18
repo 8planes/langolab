@@ -11,8 +11,7 @@
 # Sample Usage:
 #
 class activemq::packages (
-  $version,
-  $home = '/usr/share/activemq'
+  $version
 ) {
 
   $version_real = $version
@@ -22,7 +21,7 @@ class activemq::packages (
   group { 'activemq':
     ensure => 'present',
     gid    => '92',
-    before => User['activemq']
+    before => User['activemq'];
   }
   user { 'activemq':
     ensure  => 'present',
@@ -31,18 +30,11 @@ class activemq::packages (
     home    => '/usr/share/activemq',
     shell   => '/bin/bash',
     uid     => '92',
-    before  => Class['activemq::package'],
-  }
-  file { $home_real:
-    ensure => directory,
-    owner  => '0',
-    group  => '0',
-    mode   => '0755',
-    before => Class['activemq::package'],
+    before  => Class['activemq::package'];
   }
 
   class { 'activemq::package':
-    notify  => Service['activemq'],
+    notify  => Service['activemq'];
   }
 
   file { '/etc/init.d/activemq':
@@ -53,5 +45,4 @@ class activemq::packages (
     mode    => '0755',
     require => Class["activemq::package"];
   }
-
 }

@@ -12,7 +12,7 @@
 #
 class activemq::config (
   $server_config,
-  $path = '/etc/activemq/activemq.xml'
+  $path = '/etc/default/activemq.xml'
 ) {
 
   $path_real = $path
@@ -28,7 +28,7 @@ class activemq::config (
     require => Class['activemq::package'],
   }
 
-  file { "/etc/activemq":
+  file { "/etc/default":
     ensure => directory;
   }
 
@@ -38,7 +38,7 @@ class activemq::config (
     path    => $path_real,
     owner   => '0',
     group   => '0',
-    require => File["/etc/activemq"],
+    require => File["/etc/default"],
     content => $server_config_real,
   }
 

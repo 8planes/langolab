@@ -1,0 +1,61 @@
+<beans
+  xmlns="http://www.springframework.org/schema/beans"
+  xmlns:amq="http://activemq.apache.org/schema/core"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+  http://activemq.apache.org/schema/core http://activemq.apache.org/schema/core/activemq-core.xsd
+  http://activemq.apache.org/camel/schema/spring http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
+
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <value>file:${activemq.base}/conf/credentials.properties</value>
+        </property>
+    </bean>
+
+    <broker xmlns="http://activemq.apache.org/schema/core" brokerName="localhost" useJmx="true">
+        <!-- Queue setup.  Queues can be created on the fly by any user with
+             admin rights, but it is not good to give every user admin rights.  -->
+        <destinations>
+            <queue physicalName="user" />
+        </destinations>
+
+        <!-- We don't have any other brokers to connect to -->
+        <networkConnectors>
+        </networkConnectors>
+
+        <!-- Do not create an ActiveMQ JMX connector.  Use the Sun JMX connector
+             instead, and hook ActiveMQ to it. -->
+        <managementContext>
+            <managementContext createConnector="false" />
+        </managementContext>
+
+        <plugins>
+            <simpleAuthenticationPlugin>
+                <users>
+                    <authenticationUser username="sa" password="manager" groups="producers,consumers,admins" />
+                    <authenticationUser username="writer" password="writer" groups="producers,consumers" />
+                    <authenticationUser username="reader" password="reader" groups="consumers" />
+                </users>
+            </simpleAuthenticationPlugin>
+            <authorizationPlugin>
+                <map>
+                    <authorizationMap>
+                        <authorizationEntries>
+                            <authorizationEntry queue=">" write="producers" read="consumers" admin="admins" />
+                        </authorizationEntries>
+                    </authorizationMap>
+               </map>
+            </authorizationPlugin>
+        </plugins>
+
+        <transportConnectors>
+<% if stomp_debug -%>
+            <transportConnector name="stomp" uri="stomp://localhost:61613?trace=true"/>
+<% else -%>
+            <transportConnector name="stomp+nio" uri="stomp://localhost:61613"/>
+<% end -%>
+        </transportConnectors>
+    </broker>
+
+      <import resource="jetty.xml"/>
+</beans>

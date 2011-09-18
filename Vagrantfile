@@ -5,6 +5,7 @@ Vagrant::Config.run do |config|
 
   config.vm.forward_port "http", 8000, 8000
   config.vm.forward_port "stomp", 61613, 61613
+  config.vm.forward_port "activemq console", 8161, 8161
 
   config.vm.share_folder "project", "/opt/langolab", "."
 
