@@ -18,6 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 goog.provide('ll.Swf');
 
+goog.require('ll');
 goog.require('goog.events.EventTarget');
 goog.require('goog.json');
 goog.require('goog.debug.Logger');

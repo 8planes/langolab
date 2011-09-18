@@ -41,7 +41,7 @@ from llauth.forms import CustomUserCreationForm
 from django.contrib.auth.forms import AuthenticationForm
 
 NoSuffixAuthenticationForm = \
-    lambda **kwargs: AuthenticationForm(label_suffix="", **kwargs)
+    lambda **kwargs: AuthenticationForm(prefix="login", label_suffix="", **kwargs)
 
 def login(request, next='/'):
     next = request.GET.get('next', next)
