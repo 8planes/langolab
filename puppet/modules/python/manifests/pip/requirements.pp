@@ -29,7 +29,7 @@ define python::pip::requirements($venv, $cwd, $owner=undef, $group=undef) {
   }
   
   exec { "update $name requirements":
-    command => "$venv/bin/pip install -Ur $requirements",
+    command => "$venv/bin/pip install -r $requirements -E ${venv}",
     cwd => $cwd,
     subscribe => Exec["create new checksum of $name requirements"],
     logoutput => true,
