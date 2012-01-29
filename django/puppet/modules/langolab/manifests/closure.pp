@@ -2,7 +2,7 @@ class langolab::closure($project_dir) {
   $current_revision = 1196
   $svn_repo = 'http://closure-library.googlecode.com/svn/trunk/'
   $local_dir = '/opt/google-closure'
-  
+
   package { "subversion":
     ensure => "installed";
   }

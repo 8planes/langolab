@@ -49,6 +49,7 @@
         </plugins>
 
         <transportConnectors>
+            <transportConnector name="openwire" uri="tcp://0.0.0.0:61616"/>
 <% if stomp_debug -%>
             <transportConnector name="stomp" uri="stomp://0.0.0.0:61613?trace=true"/>
 <% else -%>
