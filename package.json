@@ -1,0 +1,11 @@
+{
+    "name": "langolab",
+    "version": "0.0.1",
+    "dependencies": {
+        "express": "2.5.6",
+        "redis-url": "0.0.1",
+        "jade": "0.20.0",
+        "underscore": "1.2.3",
+        "mongoose": "2.0"
+    }
+}
