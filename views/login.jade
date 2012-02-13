@@ -1,0 +1,17 @@
+extends layout
+
+block css
+  link(rel="stylesheet", media="screen", type="text/css", href="css/login.css")
+
+block content
+  h2 To keep the site rated G, we need you to sign in. You can sign in 
+    | using Facebook, Twitter, or Google. Or you can create a username 
+    | and password for this site.
+  #login
+    h2.top-header Sign in
+    form#login_form(action="./loginPost", method="post")
+      p
+        label(for="id_login-username") Username
+        input#id_login-username(type="text", name="login-username", maxlength="30")
+      p
+        
