@@ -1,0 +1,92 @@
+.ll-schedulingwidget {
+   width: 410px;
+}
+
+.ll-schedulingwidget .ll-horizontalscroller {
+   height: 120px;
+   width: 410px;
+}
+
+.ll-schedulingwidget .scrollercontainer {
+   width: 370px;
+   height: 120px;
+   float: left;
+   overflow: hidden;
+}
+
+.ll-schedulingwidget .ll-timeribbon {
+   width: 690px;
+}
+
+.ll-schedulingwidget .leftscroller, .ll-schedulingwidget .rightscroller {
+   float: left;
+   width: 20px;
+   height: 120px;
+   background: transparent url('../images/scrollers.png') no-repeat;
+}
+
+.ll-schedulingwidget .leftscroller {
+   background-position: 0 -120px;
+}
+
+.ll-schedulingwidget .rightscroller {
+   background-position: -20px -120px;
+}
+
+.ll-schedulingwidget .leftscroller-over {
+   background-position: 0 0;
+}
+
+.ll-schedulingwidget .rightscroller-over {
+   background-position: -20px 0;
+}
+
+
+.ll-schedulingwidget div.myschedule {
+   width: 195px;
+   float: left;
+}
+
+.ll-schedulingwidget div.partneravail {
+   width: 195px;
+   margin-left: 205px;
+}
+
+.ll-schedulingwidget .partneravailsubdiv, .ll-schedulingwidget .myavailsubdiv {
+   margin: 4px 0;
+}
+
+.ll-schedulingwidget .availbox {
+   width: 20px;
+   height: 20px;
+   float: left;
+}
+
+.ll-schedulingwidget .availbox-1 {
+   background: #cfc;
+}
+
+.ll-schedulingwidget .availbox-2 {
+   background: #7f7;
+}
+
+.ll-schedulingwidget .availbox-3 {
+   background: #0f0;
+}
+
+.ll-schedulingwidget .availtext {
+   margin-left: 28px;
+   line-height: 20px;
+}
+
+.ll-schedulingwidget .my-availbox {
+   background: #66f;
+}
+
+.ll-schedulingwidget .myavailsubdiv-editing div.my-availbox {
+   background: #fff;
+}
+
+.ll-schedulingwidget .myavailsubdiv-editing .availtext {
+   color: #999;
+}

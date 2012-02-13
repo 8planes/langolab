@@ -1,0 +1,73 @@
+!!! 5
+html(lang="en")
+  head
+    title Dual Immersion Platform -- langoLAB
+    link(rel='stylesheet', media='screen', type='text/css', href=base + 'css/ll.css')
+    block css
+  body
+    #ll_nonFooter
+      #ll_content
+        .site-header
+          .fixed-lg
+            h1.logo
+              a(href="http://www.langolab.com")
+                span Langolab
+                block headerright
+        .fixed-lg.main-content
+          table(cellspacing='0', cellpadding='0').siteBox.gwt-DecoratorPanel
+            tr.top
+              td.topLeft
+                .corner.topLeftInner
+              td.topCenter
+                .topCenterInner
+              td.topRight
+                .corner.topRightInner
+            tr.middle
+              td.middleLeft
+                .middleLeftInner
+              td.middleCenter
+                .middleCenterInner
+                  block content
+              td.middleRight
+                .middleRightInner
+            tr.bottom
+              td.bottomLeft
+                .corner.bottomLeftInner
+              td.bottomCenter
+                .bottomCenterInner
+              td.bottomRight
+                .corner.bottomRightInner
+    #ll_footer.fixed-lg
+      .footerTop
+        .speechBubble.clear
+          .twitter(onclick="window.open('http://www.twitter.com/langolab', 'twitterLL');")
+            &nbsp;
+          .facebook(onclick="window.open('http://www.facebook.com/langoLAB', 'fbLL');")
+            &nbsp;
+        .bird
+          img(src=base + "images/bird-footer.png")
+        #ll_bottomLinks.clear
+          span 
+            a.ll-FooterLink.ll-LinkButton(href="/about") About
+          span 
+            a.ll-FooterLink.ll-LinkButton(href="http://blog.langolab.com") Blog
+          span
+            a.ll-FooterLink.ll-LinkButton(href="/contact") Contact
+        #ll_copyright &copy; Copyright 2012
+          &nbsp;
+          b LangoLAB, LLC
+          &nbsp;
+          | All Rights Reserved
+    block scripts
+      script(type="text/javascript", src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js")
+    script(type="text/javascript")
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', "UA-4038971-3"]);
+      _gaq.push(['_trackPageview']);
+      (function() {
+          var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+          ga.src = 'http://www.google-analytics.com/ga.js';
+          var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+      var FACEBOOK_APP_ID = 'asdfadsf';
+      var FB_IMAGE = 'images/logo.jpg';

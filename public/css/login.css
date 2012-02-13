@@ -1,0 +1,58 @@
+a.login {
+   text-decoration: none;
+   display: block;
+   margin: 8px auto;
+}
+
+a.login:hover {
+   background-position: 0 -24px;
+}
+
+a.facebook {
+   width: 150px;
+   height: 22px;
+   background: url("../images/facebook_signin.png");
+}
+
+a.google {
+   width: 150px;
+   height: 22px;
+   background: url("../images/google_signin.png");
+}
+
+a.twitter {
+   width: 150px;
+   height: 22px;
+   background: url("../images/twitter_signin.png");
+}
+
+div#login {
+   width: 400px;
+   float: left;
+}
+
+div#create_account {
+   margin-left: 420px;
+}
+
+#login, #create_account {
+   padding-top: 12px;
+}
+
+h2.top-header {
+   margin-top: 0;
+}
+
+input {
+   margin-left: 12px;
+   border: 1px solid #cecece;
+   padding: 4px;
+   font: inherit;
+   width: 240px;
+   height: 18px;
+   line-height: 18px;
+}
+
+label {
+   width: 120px;
+}

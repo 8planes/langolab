@@ -28,7 +28,7 @@ class nodejs {
   exec { "make_node":
     cwd => "/tmp/node-v${version}",
     path => "/usr/local/bin:/usr/bin:/bin",
-    command => "make"
+    command => "make",
     creates => "/tmp/node-v${version}/build",
     unless => "/usr/bin/test /usr/local/bin/node",
     require => Exec["configure_node"];
@@ -36,7 +36,7 @@ class nodejs {
   exec { "make_install_node":
     cwd => "/tmp/node-v${version}",
     path => "/usr/local/bin:/usr/bin:/bin",
-    command => "make install"
+    command => "make install",
     creates => "/usr/local/bin/node",
     require => Exec["configure_node"];
   }

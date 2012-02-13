@@ -6,6 +6,9 @@
         "redis-url": "0.0.1",
         "jade": "0.20.0",
         "underscore": "1.2.3",
-        "mongoose": "2.0"
+        "mongoose": "2.0",
+        "passport": "0.1.6",
+        "express-messages": "0.0.2",
+        "connect-mongo": ">= 0.0.1"
     }
 }

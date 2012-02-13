@@ -1,0 +1,41 @@
+extends layout
+
+block append css
+  link(rel="stylesheet", media="screen", type="text/css", href="css/login.css")
+  link(rel="stylesheet", media="screen", type="text/css", href="css/index.css")
+
+block append scripts
+  script(type="text/javascript", src=base + "js/share.js")
+
+block content
+  h1 Practice a foreign language with a native speaker, over webcam.
+  .rightcolumn
+    h2 You get matched with someone who natively speaks the language 
+      | you're trying to learn, and who is trying to learn your 
+      | language. You talk.
+  .login-stuff
+    a.start-talking(href='/enter_conversations') Start talking
+    h2 Do you have feedback? Ideas? Want to discuss something?
+    p That's great, we're just getting started. Please visit our discussion group: 
+      a(href="http://groups.google.com/group/langolab-users", target="discussion") 
+        | http://groups.google.com/group/langolab-users
+      |.
+  .most-popular
+    h3 Most popular languages over last week
+    ul.top-languages-list
+    each stat, i in conversationStats
+      li.rank-#{i}
+        span.label
+          span.native
+            #{stat.nativeLanguage}
+          | speakers learning 
+          span.foreign
+            #{stat.foreignLanguage}
+        span.total-count
+          #{stat.count}
+    h3.spread-word Help us spread the word!
+    .share
+      a.share.fb-share.fb-sharesite(href="javascript:void();")
+        span Share on Facebook
+      a.share.tw-share.tw-sharesite(href="javascript:void();")
+        span Share on Twitter

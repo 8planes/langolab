@@ -1,0 +1,62 @@
+.ll-timeribbon div.hours {
+   height: 100px;
+   width: 680px;
+}
+
+.ll-timeribbon span.hour {
+   display: block;
+   float: left;
+   height: 100px;
+   width: 4px;
+}
+
+.ll-timeribbon span.daydiv {
+   border-left: 1px solid gray;
+}
+
+.ll-timeribbon span.endday {
+   border-right: 1px solid gray;
+}
+
+.ll-timeribbon span.hourover span.myhour {
+   background-color: #999999;
+}
+
+.ll-timeribbon span.selected span.myhour {
+   background-color: #66f;
+}
+
+.ll-timeribbon span.partnerhour {
+   display: block;
+   width: 4px;
+   height: 50px;
+}
+
+.ll-timeribbon span.partnerhour-1 {
+   background: #cfc;
+}
+
+.ll-timeribbon span.partnerhour-2 {
+   background: #7f7;
+}
+
+.ll-timeribbon span.partnerhour-3 {
+   background: #0f0;
+}
+
+.ll-timeribbon span.myhour {
+   display: block;
+   width: 4px;
+   height: 100px;
+}
+
+.ll-timeribbon span.myhour-half {
+   height: 50px;
+}
+
+.ll-timeribbon span.day {
+   display: inline-block;
+   width: 97px;
+   text-align: center;
+}
+

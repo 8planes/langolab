@@ -1,0 +1,23 @@
+#status {
+   font-weight: bold;
+   font-size: 14px;
+}
+
+div.swfcontainer {
+   width: 480px;
+   height: 440px;
+   float: left;
+}
+
+div.right {
+   margin-left: 490px;
+}
+
+div.dygraph-title {
+   font-size: 14px;
+}
+
+#chart {
+   margin-top: 18px;
+   margin-left: 12px;
+}
