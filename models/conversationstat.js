@@ -23,7 +23,7 @@ var ConversationStatSchema = new mongoose.Schema({
 mongoose.model('conversationStat', ConversationStatSchema);
 
 ConversationStatSchema.index(
-    { nativeLanguage: 1, foreignLanguage: 1, week_start_date: 1 },
+    { nativeLanguage: 1, foreignLanguage: 1, weekStartDate: 1 },
     { unique: true });
 
 ConversationStatSchema.index({ count: -1 });
@@ -31,13 +31,15 @@ ConversationStatSchema.index({ count: -1 });
 ConversationStatSchema.statics.increment = 
     function(nativeLanguage, foreignLanguage, date) {
         var curDate = utils.utcDate(date);
+        var lastDate = new Date(curDate.getTime());
         curDate.setDate(curDate.getDate() - 6);
-        while (curDate <= date) {
+        while (curDate <= lastDate) {
             this.update({ nativeLanguage: nativeLanguage,
                           foreignLanguage: foreignLanguage,
-                          date: utils.ut },
+                          weekStartDate: new Date(curDate.getTime()) },
                         { $inc: { count: 1 } },
-                        { upsert: true });
+                        { upsert: true },
+                        function(err, numAffected) {});
             curDate.setDate(curDate.getDate() + 1);
         }
     };

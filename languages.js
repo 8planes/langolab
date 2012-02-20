@@ -1,4 +1,4 @@
-_und = require("underscore");
+var _und = require("underscore");
 
 var languages = [
     ['en', 'English'],

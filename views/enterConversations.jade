@@ -1,0 +1,36 @@
+extends layout
+
+block css
+  link(rel="stylesheet", media="screen", type="text/css", href="css/enterConversations.css")
+
+block append scripts
+  script(type="text/javascript")
+    var LANGUAGES = !{languageJSON};
+  script(type="text/javascript", src="js/enterConversations.js")
+
+block content
+  h2 Languages I speak natively
+  .native
+    if nativeLanguages.length == 0
+      p You must specify at least one language you speak natively.
+    .native-languages
+      each nl in nativeLanguages
+        .native-language
+          select
+            each l in languages
+              option(value="#{l[0]}", selected=(l[0] == nl ? "selected" : null)) #{l[1]}
+          a.remove(href="javascript:void(0)") Remove
+    a.add(href="javascript:void(0)") Add native language
+  h2 Languages I'm trying to learn
+  .foreign
+    if foreignLanguages.length == 0
+      p You must specify at least one language you're trying to learn.
+    .foreign-languages
+      each fl in foreignLanguages
+        .foreign-language
+          select
+            each l in languages
+              option(value="#{l[0]}", selected=(l[0] == fl ? "selected" : null)) #{l[1]}
+          a.remove(href="javascript:void(0)") Remove
+    a.add(href="javascript:void(0)") Add foreign language
+  a.continue(href="javascript:void(0)") Continue

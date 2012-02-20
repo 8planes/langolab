@@ -3,6 +3,9 @@ extends layout
 block css
   link(rel="stylesheet", media="screen", type="text/css", href="css/login.css")
 
+block append scripts
+  script(type="text/javascript", src="js/login.js")
+
 block content
   h2 To keep the site rated G, we need you to sign in. You can sign in 
     | using Facebook, Twitter, or Google. Or you can create a username 
@@ -14,4 +17,27 @@ block content
         label(for="id_login-username") Username
         input#id_login-username(type="text", name="login-username", maxlength="30")
       p
-        
+        label(for="id_login-password") Password
+        input#id_login-password(type="password", name="login-password")
+      button(type="submit", value="login") Login
+      input(type="hidden", name="next", value=nextURL)
+    .social-signin-container
+      h3.social-signin Or sign in using:
+      .social-signin
+        a.login.facebook(href="./facebook_login?next=" + nextURL)
+        a.login.google(href="./gmail_login?next=" + nextURL)
+        a.login.twitter(href="./twitter_login?next=" + nextURL)
+  #create_accont
+    h2.top-header Create an Accont
+    form#creation_form(action="./createUser", method="post")
+      p
+        label(for="id_username") Username
+        input#id_username(type="text", name="username", maxlength="30")
+      p
+        label(for="id_email") Email address
+        input#id_email(type="text", name="email", maxlength="75")
+      p
+        label(for="id_password") Password
+        input#id_password(type="password", name="password", maxlength=30)
+      button(type="submit", value="Create Account") Create Account
+      input(type="hidden", name="next", value=nextURL)
