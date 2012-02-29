@@ -1,4 +1,5 @@
 var auth = require('../auth.js'),
+passport = require('passport'),
 check = require('validator').check,
 _und = require('underscore'),
 User = require('../models/user.js'),
@@ -80,13 +81,21 @@ module.exports = function(app) {
         });
     });
     app.get('/login', function(req, res) {
-        console.log(req.session);
-        console.log(req.session.cookie);
         res.render('login', { nextURL: req.query.next || '/' });
     });
-    app.post('/loginPost', function(req, res) {
-        var data = req.body;
-    });
+    app.post('/loginPost', 
+             passport.authenticate('local'),
+             function(req, res) {
+                 console.log(req.isAuthenticated());
+                 console.log(req.user);
+                 if (req.isAuthenticated()) {
+                     res.json({ success: true });
+                 }
+                 else {
+                     res.json({ success: false, 
+                                errors: { who_knows: true } });
+                 }
+             });
     app.post('/createUser', function(req, res) {
         var data = req.body;
         createUser(data, function(user, errors) {
@@ -96,10 +105,6 @@ module.exports = function(app) {
             else {
                 console.log("logging in!");
                 req.logIn(user, function(err) {
-                    console.log(req.user);
-                    console.log(err);
-                    console.log(user);
-                    console.log(req.session);
                     res.json({ success: true });
                 });
             }

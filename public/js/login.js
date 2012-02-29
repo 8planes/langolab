@@ -33,4 +33,19 @@ $(function() {
                'json');
         return false;
     });
+    $('#login_form button').click(function(e) {
+        e.preventDefault();
+        var url = $('#login_form').attr('action');
+        $.post(url,
+               $('#login_form').serialize(),
+               function(data) {
+                   if (data.success) {
+                       window.location.href = './enterConversations';
+                   }
+                   else {
+                       console.log(data.errors);
+                   }
+               },
+               'json');
+    });
 });

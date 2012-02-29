@@ -10,6 +10,8 @@ mongoose.connect(settings.MONGO_DB_URL);
 
 var app = express.createServer();
 
+var io = require('socket.io').listen(app);
+
 app.set("views", __dirname + "/views");
 app.set("view engine", "jade");
 app.set("view options", { layout: false });
@@ -43,7 +45,7 @@ app.configure(function() {
 });
 
 require('./routes/site')(app);
-require('./routes/conversations')(app);
+require('./routes/conversations')(app, io);
 
 var port = process.env.PORT || 3000;
 

@@ -16,6 +16,7 @@
         "passport-twitter": "0.1.0",
         "passport-google": "0.1.0",
         "bcrypt": "0.4.1",
-        "validator": "0.4.1"
+        "validator": "0.4.1",
+        "socket.io": "0.8.7"
     }
 }

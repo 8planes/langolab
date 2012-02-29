@@ -3,5 +3,9 @@ extends layout
 block css
   link(rel="stylesheet", media="screen", type="text/css", href="css/conversations.css")
 
+block append scripts
+  script(type="text/javascript", src=base + "/socket.io/socket.io.js")
+  
+
 block content
   p Waiting for a conversation

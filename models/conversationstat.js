@@ -4,7 +4,7 @@ var mongoose = require('mongoose'),
     settings = require('../settings');
 
 var fullLanguageName = function(l) {
-    return languages.languageMap[l];
+    return languages.LANGUAGE_MAP[l];
 };
 
 var ConversationStatSchema = new mongoose.Schema({

@@ -23,7 +23,10 @@ passport.deserializeUser(function(id, done) {
 });
 
 passport.use(new LocalStrategy(
+    { usernameField: 'login-username',
+      passwordField: 'login-password' },
     function(username, password, done) {
+        console.log('local strat in effect, yall');
         User.findOne(
             { 'name': username },
             function(err, doc) {
