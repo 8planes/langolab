@@ -17,12 +17,9 @@ WaitingUserSchema.index(
       'languages.foreignLanguage': 1,
       'languages.nativeLanguage': 1});
 
-WaitingUser.statics.ping = 
+WaitingUserSchema.statics.ping = 
     function(userID, languagePairs, callback) 
 {
-    if (typeof userID == "string") {
-        userID = new mongoose.Schema.ObjectId(userID);
-    }
     languagePairs = _und.map(
         languagePairs,
         function(pair) {
@@ -31,11 +28,10 @@ WaitingUser.statics.ping =
                 nativeLanguage: pair[0]
             };
         });    
-    console.log(langaugePairs);
     this.update(
         { userID: userID },
         { lastPing: new Date(),
-          langauges: languagePairs },
+          languages: languagePairs },
         { upsert: true},
         function(err, numAffected) {
             callback();
