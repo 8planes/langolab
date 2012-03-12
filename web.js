@@ -25,6 +25,12 @@ app.dynamicHelpers({
         // however if you run the mounting example
         // it adjusts to /blog/post/add
         return '/' == app.route ? '' : app.route;
+    },
+    base_conversations_js: function() {
+        return "http://ll.example.com:8001";
+    },
+    use_compiled_js: function() {
+        return false;
     }
 });
 

@@ -5,7 +5,20 @@ block css
 
 block append scripts
   script(type="text/javascript", src=base + "/socket.io/socket.io.js")
-  
+  script(type="text/javascript")
+    var socket = io.connect("http://ll.example.com:8000");
+    var USER_ID = '#{userID}';
+    var LANGUAGE_PAIRS = !{languagePairs};
+  if use_compiled_js
+    script(type="text/javascript", src=base + "/compiled/conversations.js")
+  else
+    script(type="text/javascript", src=base_conversations_js + "/closure/goog/base.js")
+    script(type="text/javascript", src=base_conversations_js + "/js/conversations/dependencies.js")
+    script(type="text/javascript")
+      goog.require("goog.debug.Logger");
+      goog.require("goog.debug.FancyWindow");
+      goog.require("ll.WaitingRoutine");
+    script(type="text/javascript", src=base_conversations_js + "/js/conversations/startwaiting.js")
 
 block content
   p Waiting for a conversation

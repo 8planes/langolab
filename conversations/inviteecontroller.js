@@ -1,4 +1,6 @@
-var pubsub = require('../singletonpubsub.js');
+var pubsub = require('../singletonpubsub.js'),
+channels = require('./channels.js'),
+_und = require('underscore');
 
 /**
  * @constructor
@@ -10,7 +12,7 @@ var InviteeController = function(userID, socket) {
 
 InviteeController.prototype.listenForInvitations = function() {
     pubsub.subscribe(
-        inviteChannel(this.userID_),
+        channels.inviteChannel(this.userID_),
         _und.bind(this.invitationReceived_, this));
 };
 
@@ -21,10 +23,11 @@ InviteeController.prototype.invitationReceived_ = function(token) {
 InviteeController.prototype.invitationResponseReceived = function(data) {
     var that = this;
     pubsub.publish(
-        invitationResponseChannel(data.token), 
+        channels.invitationResponseChannel(data.token), 
         data.response);
     if (data.response == InviteeResponse.ACCEPTED) {
-        var confirmationChannel = invitationConfirmationChannel(data.token);
+        var confirmationChannel = 
+            channels.invitationConfirmationChannel(data.token);
         var unsubscribe = function() {
             pubsub.unsubscribe(confirmationChannel);
         };

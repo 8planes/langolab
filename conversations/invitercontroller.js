@@ -1,5 +1,9 @@
 var pubsub = require('../singletonpubsub.js'),
-WaitingUser = require('../models/waitinguser.js');
+WaitingUser = require('../models/waitinguser.js'),
+_und = require('underscore'),
+InviterResponse = require('./inviterresponse.js');
+
+var PING_THRESHOLD = 8;
 
 var InviterController = function(userID) {
     /**
@@ -15,8 +19,8 @@ var InviterController = function(userID) {
 InviterController.prototype.makeInvitations = 
     function(languagePairs, callback) 
 {
+    console.log("makeInvitations");
     this.callback_ = callback;
-
     var userList = [];
     var numQueriesExecuted = 0;
     var pingTimeout = new Date(new Date().getTime() - PING_THRESHOLD * 1000);
@@ -43,19 +47,26 @@ InviterController.prototype.makeInvitations =
 InviterController.prototype.processAndInviteUserList_ = 
     function(rawUserList) 
 {
+    if (rawUserList.length == 0) {
+        this.callback_(InviterResponse.ZERO_USERS);
+        return;
+    }
     rawUserList = _und.sortBy(
         rawUserList,
         function(user) { return user.userID; });
     rawUserList = _und.uniq(
         rawUserList, true, 
         function(user) { return user.userID; });
+    // see http://www.mongodb.org/display/DOCS/Optimizing+Object+IDs#OptimizingObjectIDs-Sortbyidtosortbyinsertiontime
     rawUserList = _und.sortBy(
         rawUserList,
-        function(user) { return user.waitingSince; });
+        function(user) { return user._id; });
     this.inviteUserList_(rawUserList);
 };
 
 InviterController.prototype.inviteUserList_ = function(userIDList) {
+    console.log("inviteUserList_");
+    console.log(userIDList);
     var that = this;
     var accepted = false;
     var numResponses = 0;

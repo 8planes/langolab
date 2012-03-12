@@ -1,5 +1,7 @@
 var decorators = require('./decorators'),
 ConversationStat = require('../models/conversationstat'),
+User = require('../models/user'),
+WaitingUser = require('../models/waitinguser'),
 _und = require('underscore'),
 settings = require('../settings'),
 socketio = require('socket.io'),
@@ -15,17 +17,14 @@ function updateConversationStats(user) {
 }
 
 function addMakeInvitationListener(socket, userID) {
+    console.log("Adding makeInvitationsListener");
     socket.on(
         'makeInvitations',
-        function(token, languagePairs) {
-            var invitaterController = new InviterController(userID);
+        function(languagePairs, callback) {
+            console.log("makeInvitations called");
+            var inviterController = new InviterController(userID);
             inviterController.makeInvitations(
-                languagePairs, function(inviterResponse) {
-                    socket.emit(
-                        'makeInvitationsReply', 
-                        { token: token,
-                          response: inviterResponse });
-                });
+                languagePairs, callback);
         });
 }
 
@@ -39,11 +38,11 @@ function addReceiveInvitationListener(socket, userID) {
             inviteeController));
 }
 
-function socketStarted(socket, userID) {
-    // TODO: add WaitingUser record.
-    addMakeInvitationListener(socket, userID);
-    addReceiveInvitationListener(socket, userID);
-    // TODO: listen for disconnect.
+function socketStarted(socket, userID, languagePairs) {
+    WaitingUser.ping(userID, languagePairs, function() {
+        addMakeInvitationListener(socket, userID);
+        addReceiveInvitationListener(socket, userID);
+    });
 }
 
 module.exports = function(app, io) {
@@ -51,12 +50,23 @@ module.exports = function(app, io) {
         '/conversations', decorators.ensureUserLanguages,
         function(req, res) {
             updateConversationStats(req.user);
-            res.render('conversations');
+            res.render(
+                'conversations',
+                { "userID": req.user.id,
+                  "languagePairs": JSON.stringify(
+                      req.user.languagePairs()) });
         });
+    // doing this because of http://devcenter.heroku.com/articles/using-socket-io-with-node-js-on-heroku
+    // :(
     var io = socketio.listen(app);
+    io.configure(function() {
+        io.set("transports", ["xhr-polling"]); 
+        io.set("polling duration", 10);
+    });
     io.sockets.on('connection', function(socket) {
-        socket.on('setUserID', function(userID) {
-            socketStarted(socket, userID);
+        socket.on('setUserInfo', function(userID, languagePairs, callback) {
+            socketStarted(socket, userID, languagePairs);
+            callback("okay");
         });
     });
 };

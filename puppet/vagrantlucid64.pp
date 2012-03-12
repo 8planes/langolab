@@ -7,7 +7,13 @@ class vagrantlucid64 {
   class { "redis":
     data_dir => "/opt/redis-data";
   } ->
-  class { "nodejs": }
+  class { "nodejs": } ->
+  class { "langolab::closure": } ->
+  class { "::nginx": } ->
+  nginx::vhost { "ll.example.com":
+    name => "langolab",
+    source => "puppet:///modules/langolab/vhost.nginx";
+  }
 }
 
 class { 'vagrantlucid64': }

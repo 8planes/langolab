@@ -1,4 +1,5 @@
-var mongoose = require('mongoose');
+var mongoose = require('mongoose'),
+_und = require('underscore');
 
 var LanguagePairSchema = new mongoose.Schema({
     foreignLanguage: String,
@@ -6,17 +7,40 @@ var LanguagePairSchema = new mongoose.Schema({
 });
 
 var WaitingUserSchema = new mongoose.Schema({
-    userID: mongoose.Schema.ObjectId,
-    waitingSince: Date,
+    userID: { type: mongoose.Schema.ObjectId, unique: true },
     lastPing: Date,
     languages: [LanguagePairSchema]
 });
 
 WaitingUserSchema.index(
-    { waitingSince: 1, 
-      lastPing: -1, 
+    { lastPing: -1, 
       'languages.foreignLanguage': 1,
       'languages.nativeLanguage': 1});
+
+WaitingUser.statics.ping = 
+    function(userID, languagePairs, callback) 
+{
+    if (typeof userID == "string") {
+        userID = new mongoose.Schema.ObjectId(userID);
+    }
+    languagePairs = _und.map(
+        languagePairs,
+        function(pair) {
+            return {
+                foreignLanguage: pair[1],
+                nativeLanguage: pair[0]
+            };
+        });    
+    console.log(langaugePairs);
+    this.update(
+        { userID: userID },
+        { lastPing: new Date(),
+          langauges: languagePairs },
+        { upsert: true},
+        function(err, numAffected) {
+            callback();
+        });
+};
 
 var WaitingUser = exports = module.exports = 
     mongoose.model("waitinguser", WaitingUserSchema);

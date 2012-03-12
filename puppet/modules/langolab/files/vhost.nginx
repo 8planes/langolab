@@ -1,0 +1,16 @@
+server {
+    listen 80;
+    server_name ll.example.com;
+    client_max_body_size 4G;
+    open_file_cache off;
+    sendfile off;
+
+    keepalive_timeout 5;
+
+    location ~* /closure/(.*) {
+        root /opt/google-closure;
+    }
+    location ~* /js/conversations/(.*) {
+        root /opt/langolab/public;
+    }
+}
