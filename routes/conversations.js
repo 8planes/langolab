@@ -5,8 +5,7 @@ WaitingUser = require('../models/waitinguser'),
 _und = require('underscore'),
 settings = require('../settings'),
 socketio = require('socket.io'),
-InviteeController = require('../conversations/inviteecontroller.js'),
-InviterController = require('../conversations/invitercontroller.js');
+pubsub = require('../singletonpubsub');
 
 function updateConversationStats(user) {
     var date = new Date();
@@ -16,33 +15,56 @@ function updateConversationStats(user) {
     });
 }
 
-function addMakeInvitationListener(socket, userID) {
-    console.log("Adding makeInvitationsListener");
-    socket.on(
-        'makeInvitations',
-        function(languagePairs, callback) {
-            console.log("makeInvitations called");
-            var inviterController = new InviterController(userID);
-            inviterController.makeInvitations(
-                languagePairs, callback);
-        });
-}
-
-function addReceiveInvitationListener(socket, userID) {
-    var inviteeController = new InviteeController(userID);
-    inviteeController.listenForInvitations(socket);
-    socket.on(
-        "invitationResponse",
-        _und.bind(
-            inviteeController.invitationResponseReceived, 
-            inviteeController));
+function waitingChannel(userID) {
+    return userID + "_waiting";
 }
 
 function socketStarted(socket, userID, languagePairs) {
-    WaitingUser.ping(userID, languagePairs, function() {
-        addMakeInvitationListener(socket, userID);
-        addReceiveInvitationListener(socket, userID);
+    socket.on('disconnect', function() {
+        stopWaiting(socket, userID);
     });
+    WaitingUser.nextAvailableUser(
+        languagePairs,
+        function(matchedUser) {
+            if (matchedUser) {
+                stopWaiting(socket, userID);
+                startMatch(socket, userID, matchedUser._id);
+            }
+            else {
+                startWaiting(socket, userID, languagePairs);
+            }
+        });
+}
+
+function startMatch(socket, userID, matchedUserID) {
+    var match = new Match();
+    match.user0 = mongoose.Type.ObjectId(userID);
+    match.user1 = matchedUserID;
+    match.dateStarted = new Date();
+    match.save(function(err) {
+        socket.emit("matchStarted", match._id + '');
+        pubsub.publish(
+            waitingChannel(matchedUserID + ''),
+            match._id + '');
+    });
+}
+
+function stopWaiting(socket, userID) {
+    WaitingUser.stop(userID);
+    pubsub.unsubscribe(waitingChannel(userID));
+}
+
+function startWaiting(socket, userID, languagePairs) {
+    pubsub.subscribe(
+        waitingChannel(userID),
+        function(matchID) {
+            stopWaiting(socket, userID);
+            socket.emit("matchStarted", matchID + '');
+        });
+    WaitingUser.start(
+        mongoose.Types.ObjectId(userID),
+        languagePairs,
+        function() {});
 }
 
 module.exports = function(app, io) {

@@ -24,12 +24,6 @@ ll.WaitingRoutine.prototype.start = function(socket, engagementCallback) {
     this.waiting_ = true;
     this.socket_ = socket;
     this.engagementCallback_ = engagementCallback;
-    this.invitationListener_ = ll.InvitationListener.getInstance();
-    this.invitationMaker_ = ll.InvitationMaker.getInstance();
-    this.invitationListener_.listen(
-        socket, 
-        goog.bind(this.invitationReceived_, this));
-    this.attemptToEngage_();
 };
 
 ll.WaitingRoutine.prototype.attemptToEngage_ = function() {

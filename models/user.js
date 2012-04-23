@@ -6,18 +6,19 @@ var UserSchema = new mongoose.Schema({
     email: { type: String, required: false, index: { unique: true, sparse: true }},
     hashedPassword: String,
     salt: String,
-    fb: { type: {
-        id: String,
-        username: String,
-        displayName: String,
-        lastName: String,
-        firstName: String,
-        middleName: String,
-        gender: String,
-        profileURL: String,
-    },
-          required: false
+    fb: { 
+        type: {
+            id: String,
+            username: String,
+            displayName: String,
+            lastName: String,
+            firstName: String,
+            middleName: String,
+            gender: String,
+            profileURL: String,
         },
+        required: false
+    },
     nativeLanguages: [String],
     foreignLanguages: [String]
 });
