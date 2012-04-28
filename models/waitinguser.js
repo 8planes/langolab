@@ -27,25 +27,25 @@ function nextAvailableUser(languagePairs, callback) {
         callback(null);
     }
     else {
-        var pingTimeout = new Date(
-            new Date().getTime() - PING_THRESHOLD * 1000);
         var languagePair = languagePairs.pop();
-        this.findOneAndRemove(
-            {
-                languages: { 
-                    '$elemMatch': {
-                        foreignLanguage: languagePair[1],
-                        nativeLanguage: languagePair[0]
-                    }
+        var query = {
+            languages: { 
+                '$elemMatch': {
+                    foreignLanguage: languagePair[1],
+                    nativeLanguage: languagePair[0]
                 }
-            },
-            { sort: { waitStart: -1 } },
-            function(doc) {
+            }
+        };
+        var sort = [['waitStart', 'descending']];
+        var that = this;
+        this.collection.findAndRemove(
+            query, sort, {},
+            function(err, doc) {
                 if (doc) {
                     callback(doc);
                 }
                 else {
-                    nextAvailableUser(languagePairs, callback);
+                    that.nextAvailableUser(languagePairs, callback);
                 }
             });
     }

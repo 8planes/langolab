@@ -53,7 +53,7 @@ app.configure(function() {
 require('./routes/site')(app);
 require('./routes/conversations')(app, io);
 
-var port = process.env.PORT || 3000;
+var port = process.env.PORT || 8000;
 
 app.listen(port, function() {
     console.log("Listening on " + port);

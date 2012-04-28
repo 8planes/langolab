@@ -59,7 +59,7 @@ function startWaiting(socket, userID, languagePairs) {
         waitingChannel(userID),
         function(matchID) {
             stopWaiting(socket, userID);
-            socket.emit("matchStarted", matchID + '');
+            socket.emit("matchStarted", matchID);
         });
     WaitingUser.start(
         mongoose.Types.ObjectId(userID),
@@ -78,9 +78,9 @@ module.exports = function(app, io) {
                   "languagePairs": JSON.stringify(
                       req.user.languagePairs()) });
         });
+    var io = socketio.listen(app);
     // doing this because of http://devcenter.heroku.com/articles/using-socket-io-with-node-js-on-heroku
     // :(
-    var io = socketio.listen(app);
     io.configure(function() {
         io.set("transports", ["xhr-polling"]); 
         io.set("polling duration", 10);
