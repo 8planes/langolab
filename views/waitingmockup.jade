@@ -1,0 +1,49 @@
+extends layout
+
+block css
+  link(rel="stylesheet", media="screen", type="text/css", href="css/conversations.css")
+
+append scripts
+  script(type="text/javascript", src=base + "js/highcharts.js")
+  script(type="text/javascript", src=base + "js/waitingmockup.js")
+
+block content
+  p(style="display:none") Waiting for a conversation
+  .match(style="display:none")
+  .waiting
+    h1 You are waiting for a language partner.
+    .explanation
+      h2 We're just starting out, so we don't have many online partners yet.
+      p 
+        | Even though there aren't any potential partners online right now, you 
+        | can increase the chances of finding a partner in these ways:
+      a.schedule(href="javascript:void(0)")
+        span Schedule
+      p Share your schedule, and we'll email you when others are also planning on being online.
+      a.share.fb-share.fh-sharesite(href="javascript:void(0)")
+        span Share on Facebook
+      a.share.tw-share.tw-sharesite(href="javascript:void(0)")
+        span Share on Twitter
+      div(style="clear:left")
+      p
+        | It will help if you tell others about the site, so we can get enough 
+        | people on all the time.
+    .historicalChart
+      h2 Language partners online this past week
+      #historicalChart
+    .currentGroups
+      h2 Current groups 
+        span(id="joinOneHeader") (You can join one of these)
+      table
+        tr(id="match_2348981ab92")
+          td English -> Spanish
+          td 7 minutes
+          td Adam Duston, Yuko Kajino
+          td
+            a(href="javascript:void(0)") Join
+        tr(id="match_2334281ab92")
+          td English -> Spanish
+          td 13 minutes
+          td Adam Duston, Yuko Kajino
+          td
+            a(href="javascript:void(0)") Join

@@ -14,6 +14,12 @@ class vagrantlucid64 {
     name => "langolab",
     source => "puppet:///modules/langolab/vhost.nginx";
   }
+  file { "/home/vagrant/.bashrc":
+    source => "puppet:///modules/langolab/bashrc",
+    owner => "vagrant",
+    group => "vagrant",
+    mode => "755";
+  }
 }
 
 class { 'vagrantlucid64': }

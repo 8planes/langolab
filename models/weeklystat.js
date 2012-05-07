@@ -7,7 +7,7 @@ var fullLanguageName = function(l) {
     return languages.LANGUAGE_MAP[l];
 };
 
-var ConversationStatSchema = new mongoose.Schema({
+var WeeklyStatSchema = new mongoose.Schema({
     nativeLanguage: { 
         type: String, 
         required: true, 
@@ -16,22 +16,20 @@ var ConversationStatSchema = new mongoose.Schema({
         type: String, 
         required: true,
         get: fullLanguageName },
-    weekStartDate: { type: Date, required: true, index: true},
+    weekStartDate: { type: Date, required: true },
     count: { type: Number }
 });
 
-mongoose.model('conversationStat', ConversationStatSchema);
-
-ConversationStatSchema.index(
+WeeklyStatSchema.index(
     { nativeLanguage: 1, foreignLanguage: 1, weekStartDate: 1 },
     { unique: true });
 
-ConversationStatSchema.index({ count: -1 });
+WeeklyStatSchema.index({ weekStartDate: 1, count: -1 });
 
-ConversationStatSchema.statics.increment = 
-    function(nativeLanguage, foreignLanguage, date) {
-        var curDate = utils.utcDate(date);
-        var lastDate = new Date(curDate.getTime());
+WeeklyStatSchema.statics.increment = 
+    function(nativeLanguage, foreignLanguage) {
+        var curDate = utils.utcDate(new Date());
+        var lastDate = utils.utcDate(new Date());
         curDate.setDate(curDate.getDate() - 6);
         while (curDate <= lastDate) {
             this.update({ nativeLanguage: nativeLanguage,
@@ -44,7 +42,7 @@ ConversationStatSchema.statics.increment =
         }
     };
 
-ConversationStatSchema.statics.topForLastWeek = function(num, callback) {
+WeeklyStatSchema.statics.topForLastWeek = function(num, callback) {
     var startDate = utils.utcDate(new Date());
     startDate.setDate(startDate.getDate() - 6);
     this.where('weekStartDate', startDate)
@@ -55,5 +53,5 @@ ConversationStatSchema.statics.topForLastWeek = function(num, callback) {
         });
 };
 
-var ConversationStat = exports = module.exports = 
-    mongoose.model("conversationstat", ConversationStatSchema);
+var WeeklyStat = exports = module.exports = 
+    mongoose.model("weeklystat", WeeklyStatSchema);

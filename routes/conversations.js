@@ -1,5 +1,5 @@
 var decorators = require('./decorators'),
-ConversationStat = require('../models/conversationstat'),
+WeeklyStat = require('../models/weeklystat'),
 User = require('../models/user'),
 WaitingUser = require('../models/waitinguser'),
 _und = require('underscore'),
@@ -8,18 +8,18 @@ socketio = require('socket.io'),
 pubsub = require('../singletonpubsub');
 
 function updateConversationStats(user) {
-    var date = new Date();
     var languagePairs = user.languagePairs();
     _und.each(languagePairs, function(lp) {
-        ConversationStat.increment(lp[0], lp[1], date);
+        WeeklyStat.increment(lp[0], lp[1]);
+        HourlyStat.increment(lp[0], lp[1]);
     });
 }
 
 function waitingChannel(userID) {
-    return userID + "_waiting";
+    return userID.toString() + "_waiting";
 }
 
-function socketStarted(socket, userID, languagePairs) {
+function socketStarted(socket, userID, languagePairs, callback) {
     socket.on('disconnect', function() {
         stopWaiting(socket, userID);
     });
@@ -28,24 +28,21 @@ function socketStarted(socket, userID, languagePairs) {
         function(matchedUser) {
             if (matchedUser) {
                 stopWaiting(socket, userID);
-                startMatch(socket, userID, matchedUser._id);
+                startMatch(socket, userID, matchedUser._id, callback);
             }
             else {
                 startWaiting(socket, userID, languagePairs);
+                callback(null);
             }
         });
 }
 
-function startMatch(socket, userID, matchedUserID) {
-    var match = new Match();
-    match.user0 = mongoose.Type.ObjectId(userID);
-    match.user1 = matchedUserID;
-    match.dateStarted = new Date();
-    match.save(function(err) {
-        socket.emit("matchStarted", match._id + '');
+function startMatch(socket, userID, matchedUserID, callback) {
+    Match.start(userID, matchedUserID, function(match) {
+        callback(match._id.toString());
         pubsub.publish(
-            waitingChannel(matchedUserID + ''),
-            match._id + '');
+            waitingChannel(matchedUserID),
+            match._id.toString());
     });
 }
 
@@ -59,15 +56,22 @@ function startWaiting(socket, userID, languagePairs) {
         waitingChannel(userID),
         function(matchID) {
             stopWaiting(socket, userID);
-            socket.emit("matchStarted", matchID);
+            socket.emit("matchStarted", String(matchID));
         });
     WaitingUser.start(
-        mongoose.Types.ObjectId(userID),
-        languagePairs,
-        function() {});
+        userID, languagePairs, function() {});
+}
+
+function addMockups(app) {
+    app.get(
+        "/waitingmockup", 
+        function(req, res) {
+            res.render('waitingmockup');
+        });
 }
 
 module.exports = function(app, io) {
+    addMockups(app);
     app.get(
         '/conversations', decorators.ensureUserLanguages,
         function(req, res) {
@@ -87,8 +91,11 @@ module.exports = function(app, io) {
     });
     io.sockets.on('connection', function(socket) {
         socket.on('setUserInfo', function(userID, languagePairs, callback) {
-            socketStarted(socket, userID, languagePairs);
-            callback("okay");
+            socketStarted(
+                socket, userID, languagePairs, 
+                function(matchID) {
+                    callback(JSON.stringify({ "matchID": matchID }));
+                });
         });
     });
 };

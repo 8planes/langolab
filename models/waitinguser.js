@@ -57,7 +57,10 @@ WaitingUserSchema.statics.nextAvailableUser = nextAvailableUser;
  * Stops waiting
  */
 WaitingUserSchema.statics.stop = function(userID) {
-    this.remove({ _id: mongoose.Types.ObjectId(userID) });
+    if (typeof userID == "string") {
+        userID = new mongoose.Types.ObjectId(userID);
+    }
+    this.remove({ _id: userID });
 };
 
 /**
@@ -66,6 +69,9 @@ WaitingUserSchema.statics.stop = function(userID) {
 WaitingUserSchema.statics.start = 
     function(userID, languagePairs, callback) 
 {
+    if (typeof userID == "string") {
+        userID = new mongoose.Types.ObjectId(userID);
+    }
     var modelLanguagePairs = _und.map(
         languagePairs,
         function(pair) {

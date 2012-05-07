@@ -6,7 +6,7 @@ User = require('../models/user.js'),
 languages = require('../languages.js'),
 decorators = require('./decorators.js');
 
-var ConversationStat = require('../models/conversationstat');
+var WeeklyStat = require('../models/weeklystat');
 
 /**
  * @param {Object} data POST data from create user form
@@ -74,7 +74,7 @@ function createUser(data, callback) {
 
 module.exports = function(app) {
     app.get('/', function(req, res) {
-        ConversationStat.topForLastWeek(5, function(stats) {
+        WeeklyStat.topForLastWeek(5, function(stats) {
             res.render('index', {
                 conversationStats: stats
             });

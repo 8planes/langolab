@@ -1,23 +1,18 @@
-#status {
-   font-weight: bold;
-   font-size: 14px;
+.historicalChart {
+   float: left;
+   width: 420px;
 }
 
-div.swfcontainer {
-   width: 480px;
-   height: 440px;
+.explanation {
+   width: 450px;
    float: left;
 }
 
-div.right {
-   margin-left: 490px;
+.currentGroups {
+   clear: both;
 }
 
-div.dygraph-title {
-   font-size: 14px;
+#historicalChart {
+   height: 200px;
 }
 
-#chart {
-   margin-top: 18px;
-   margin-left: 12px;
-}

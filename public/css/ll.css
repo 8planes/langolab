@@ -164,9 +164,10 @@ h1 {
 }
 h2 {
    font-size: 16px;
-}
-h2 {
    color: #039;
+}
+h2.major {
+   color: #F60
 }
 /* footer */
 
