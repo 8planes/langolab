@@ -1,0 +1,32 @@
+extends layout
+
+block css
+  link(rel="stylesheet", media="screen", type="text/css", href="css/conversations.css")
+
+append scripts
+  script(type="text/javascript", src="http://staging.tokbox.com/v0.91/js/TB.min.js")
+  script(type="text/javascript", src=base + "js/matchmockup.js")
+
+block content
+  script
+    var OT_API_KEY = '#{otAPIKey}';
+    var OT_SESSIONID = '#{otSessionID}';
+    var OT_TOKEN = '#{otToken}';
+  p(style="display:none") Waiting for a conversation
+  .match
+    p blah blah blah
+    #videos
+      .video
+        #myPublisher
+      .video
+        #partner0
+      .video
+        #partner1
+      .video
+        #partner2
+      .video
+        #partner3
+      .video
+        #partner4
+  .waiting(style="display:none")
+

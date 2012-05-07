@@ -5,7 +5,12 @@ WaitingUser = require('../models/waitinguser'),
 _und = require('underscore'),
 settings = require('../settings'),
 socketio = require('socket.io'),
-pubsub = require('../singletonpubsub');
+pubsub = require('../singletonpubsub'),
+opentok = require('opentok');
+
+var ot = new opentok.OpenTokSDK(
+    settings.OPENTOK_API_KEY, 
+    settings.OPENTOK_API_SECRET);
 
 function updateConversationStats(user) {
     var languagePairs = user.languagePairs();
@@ -67,6 +72,23 @@ function addMockups(app) {
         "/waitingmockup", 
         function(req, res) {
             res.render('waitingmockup');
+        });
+    app.get(
+        "/matchmockup",
+        function(req, res) {
+            ot.createSession(
+                "localhost",
+                {},
+                function(session) {
+                    res.render(
+                        'matchmockup',
+                        { 'otAPIKey': settings.OPENTOK_API_KEY,
+                          'otSessionID': session.sessionId,
+                          'otToken': ot.generateToken({
+                              "session": session
+                          }) 
+                        });
+                });
         });
 }
 

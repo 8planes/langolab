@@ -1,5 +1,5 @@
 exports.utcDate = function(date) {
-    return new Date(date.getUTCFullYear(), 
-                    date.getUTCMonth(), 
-                    date.getUTCDate());
+    return new Date(Date.UTC(date.getUTCFullYear(), 
+                             date.getUTCMonth(), 
+                             date.getUTCDate()));
 };

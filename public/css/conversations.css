@@ -16,3 +16,9 @@
    height: 200px;
 }
 
+#videos .video {
+   float: left;
+   width: 264px;
+   height: 198px;
+}
+
