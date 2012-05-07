@@ -5,8 +5,10 @@ WaitingUser = require('../models/waitinguser'),
 _und = require('underscore'),
 settings = require('../settings'),
 socketio = require('socket.io'),
-pubsub = require('../singletonpubsub'),
+pubsub = require('../pubsub'),
 opentok = require('opentok');
+
+var WAITING_CHANNEL = "waiting";
 
 var ot = new opentok.OpenTokSDK(
     settings.OPENTOK_API_KEY, 
@@ -27,6 +29,7 @@ function waitingChannel(userID) {
 function socketStarted(socket, userID, languagePairs, callback) {
     socket.on('disconnect', function() {
         stopWaiting(socket, userID);
+        pubsub.unsubscribeAll(userID);
     });
     WaitingUser.nextAvailableUser(
         languagePairs,
@@ -46,19 +49,20 @@ function startMatch(socket, userID, matchedUserID, callback) {
     Match.start(userID, matchedUserID, function(match) {
         callback(match._id.toString());
         pubsub.publish(
-            waitingChannel(matchedUserID),
+            WAITING_CHANNEL,
+            matchedUserID,
             match._id.toString());
     });
 }
 
 function stopWaiting(socket, userID) {
     WaitingUser.stop(userID);
-    pubsub.unsubscribe(waitingChannel(userID));
+    pubsub.unsubscribe(WAITING_CHANNEL, userID);
 }
 
 function startWaiting(socket, userID, languagePairs) {
     pubsub.subscribe(
-        waitingChannel(userID),
+        WAITING_CHANNEL, userID,
         function(matchID) {
             stopWaiting(socket, userID);
             socket.emit("matchStarted", String(matchID));
